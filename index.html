@@ -266,6 +266,7 @@
 
         /* ==========================================================================
            PRINT AND EXACT ASPECT-RATIO MOBILE SCALING
+           This engine forces the exact 8.5x11 scale to function as an image visually
            ========================================================================== */
         @media print {
             body { background-color: #ffffff; padding: 0; margin: 0; }
@@ -288,7 +289,7 @@
     <div id="wrapper" style="display: none; flex-wrap: wrap; justify-content: center; gap: 40px; width: 100%;"></div>
 
     <script>
-        // Use the newly provided Google Sheet ID directly
+        // Your assigned static publication key string
         const SIGNATURE_KEY = '2PACX-1vQkcfkH_BAJSdXzKzQguibMZ-I6K7drGRkLwFygZ8iDgeq3OmVTTnSPRpSmGQAp3MfbfDJjXc2XLNe7';
         
         // Fetch raw CSV to bypass CORS blocks completely
@@ -299,7 +300,7 @@
             .then(csvText => {
                 const parsedRows = parseCSVRows(csvText);
                 
-                // Directly maps tabular data variables
+                // Directly maps tabular data variables based on explicit coordinate mapping
                 const englishDateHeader = parsedRows[0]?.[0] || 'Friday, June 19, 2026';
                 const hebrewParshaValue = parsedRows[2]?.[1] || 'קרח';
                 const candleLightingTime = parsedRows[2]?.[3] || '8:09 PM';
