@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Midrash Elyon Shul Publications - Perfect Mobile Scale</title>
+    <title>Midrash Elyon Shul Publications - Live Dynamic Engine</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600;700&family=David+Libre:wght@400;500;700&display=swap');
 
@@ -11,45 +11,32 @@
         body {
             background-color: #f0f2f5;
             margin: 0;
-            padding: 40px 0; /* Removed side padding to maximize mobile width */
-            display: flex;
-            flex-direction: column; /* Stack them vertically */
-            align-items: center;
-            gap: 40px;
-            overflow-x: hidden; /* Prevents horizontal scrolling on mobile */
-        }
-
-        /* The Scaling Wrapper: 
-           This acts as the "frame" for our rigid flyer.
-        */
-        .flyer-wrapper {
-            width: 100%;
+            padding: 40px 10px;
             display: flex;
             justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            flex-wrap: wrap;
         }
 
-        /* Strict 8.5" x 11" Printable Page Container 
-           Locked to pixels (816x1056) to ensure math for scaling is perfect.
-        */
+        /* Strict 8.5" x 11" Printable Page Container */
         .print-page {
             background-color: #ffffff;
-            width: 816px;
-            height: 1056px;
+            width: 8.5in;
+            height: 11in;
             box-sizing: border-box;
             position: relative;
-            color: #0b2347;
+            color: #0b2347; /* Midrash Elyon Navy */
             overflow: hidden;
             page-break-after: always;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            /* Tells the scaling engine to shrink from the top center */
-            transform-origin: top center;
         }
 
         /* ==========================================================================
            TEMPLATE 1: WEEKLY SCHEDULE FLYER
            ========================================================================== */
         .schedule-layout {
-            padding: 35px 65px;
+            padding: 0.35in 0.65in;
             font-family: 'Cinzel', serif;
             text-align: center;
             display: flex;
@@ -58,6 +45,8 @@
             height: 100%;
             box-sizing: border-box;
             position: relative;
+            
+            /* Premium Border Framing */
             border: 14px solid #0b2347;
             outline: 3px double #c5a059;
             outline-offset: -10px;
@@ -70,9 +59,10 @@
             flex: 1;
         }
 
+        /* Lock BS"D strictly to the top right inside of the borders */
         .bsd {
             font-family: 'David Libre', serif;
-            font-size: 18px;
+            font-size: 1.15rem;
             position: absolute;
             top: 15px;
             right: 20px;
@@ -81,6 +71,7 @@
             color: #c5a059;
         }
 
+        /* Split Header Grid System */
         .header-grid {
             display: grid;
             grid-template-columns: 1.2fr 1fr 1.2fr;
@@ -93,7 +84,7 @@
 
         .grid-left {
             font-family: 'David Libre', serif;
-            font-size: 22px; 
+            font-size: 1.35rem; 
             font-weight: 700;
             text-align: left;
             line-height: 1.3;
@@ -104,7 +95,7 @@
         .grid-center { text-align: center; }
 
         .grid-right {
-            font-size: 15px; 
+            font-size: 0.95rem; 
             font-weight: 700;
             text-align: right;
             letter-spacing: 0.3px;
@@ -114,7 +105,7 @@
         }
 
         .entrance-note {
-            font-size: 12px;
+            font-size: 0.75rem;
             font-weight: 500;
             color: #64748b;
             display: block;
@@ -131,7 +122,7 @@
 
         .logo-deal {
             font-family: 'Cinzel Decorative', serif;
-            font-size: 20px;
+            font-size: 1.25rem;
             font-weight: 700;
             letter-spacing: 6px;
             margin-top: 4px;
@@ -139,7 +130,7 @@
         }
 
         .section-title {
-            font-size: 20px;
+            font-size: clamp(1.1rem, 2.5vw, 1.25rem);
             font-weight: 700;
             letter-spacing: 2px;
             color: #0b2347;
@@ -165,7 +156,7 @@
         .time-row {
             display: flex;
             justify-content: space-between;
-            font-size: 18px; 
+            font-size: clamp(1.05rem, 2.2vw, 1.15rem); 
             font-weight: 600;
             margin: 3px 0;
             letter-spacing: 0.5px;
@@ -181,7 +172,7 @@
         }
 
         .row-full {
-            font-size: 16px;
+            font-size: clamp(0.9rem, 2vw, 1rem);
             font-weight: 700;
             color: #334155;
             margin-top: 3px;
@@ -189,7 +180,7 @@
             white-space: nowrap;
         }
 
-        /* Boxed Dedications Container */
+        /* Boxed Dedications Container - Auto-scales for 1, 2, or 3 columns */
         .dedications-box {
             background: linear-gradient(135deg, #fdfbf7 0%, #fcf9f2 100%);
             border: 2px solid #eadeca;
@@ -205,7 +196,7 @@
 
         .dedication-title {
             font-family: 'Cinzel Decorative', serif;
-            font-size: 16px;
+            font-size: clamp(0.95rem, 2vw, 1.05rem);
             font-weight: 700;
             letter-spacing: 3px;
             color: #c5a059;
@@ -230,9 +221,10 @@
         .dedications-column:not(:last-child) { border-right: 1px dashed #eadeca; padding-right: 8px; }
 
         .dedication-entry { padding-bottom: 2px; }
-        .dedication-type { font-size: 14px; font-weight: 700; margin-bottom: 2px; letter-spacing: 1.5px; color: #c5a059; text-transform: uppercase; white-space: normal; }
+        .dedication-type { font-size: clamp(0.75rem, 1.4vw, 0.85rem); font-weight: 700; margin-bottom: 2px; letter-spacing: 1.5px; color: #c5a059; text-transform: uppercase; white-space: normal; }
         
-        .dedication-text { font-size: 14px; line-height: 1.35; font-weight: 600; color: #0b2347; }
+        /* Auto-shrinks slightly to accommodate 3 columns safely */
+        .dedication-text { font-size: clamp(0.75rem, 1.6vw, 0.9rem); line-height: 1.35; font-weight: 600; color: #0b2347; }
         .dedication-text strong { font-weight: 700; font-size: inherit; }
 
         /* ==========================================================================
@@ -259,7 +251,10 @@
         .table-layout .bsd { position: absolute; top: 20px; right: 25px; font-size: 20px; color: #c5a059; }
         .table-layout .logo-img { width: 380px; margin-bottom: 5px; margin-top: 15px; }
         .table-parsha { font-family: 'David Libre', serif; font-size: 64px; font-weight: 700; margin: 5px 0 15px 0; color: #0b2347; text-shadow: 2px 2px 0px rgba(197, 160, 89, 0.3); }
-        .table-purpose { font-family: 'Cinzel Decorative', serif; font-size: 45px; font-weight: 700; letter-spacing: 4px; margin-bottom: 2px; line-height: 1.2; color: #c5a059; text-transform: uppercase; }
+        
+        /* Adjusted font size for table-purpose to handle longer multi-line text dynamically */
+        .table-purpose { font-family: 'Cinzel Decorative', serif; font-size: clamp(28px, 4vw, 45px); font-weight: 700; letter-spacing: 4px; margin-bottom: 2px; line-height: 1.2; color: #c5a059; text-transform: uppercase; }
+        
         .table-is-dedicated { font-size: 24px; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 6px; color: #64748b; }
         .diamond-separator { font-size: 22px; color: #c5a059; margin: 5px 0 20px 0; letter-spacing: 12px; }
 
@@ -274,6 +269,7 @@
 
         /* ==========================================================================
            PRINT AND EXACT ASPECT-RATIO MOBILE SCALING
+           This engine forces the exact 8.5x11 scale to function as an image visually
            ========================================================================== */
         @media print {
             body { background-color: #ffffff; padding: 0; margin: 0; }
@@ -427,6 +423,7 @@
                 flyer1ColumnsHTML += `</div>`;
             }
 
+            // You can also adjust this dynamically from your Google Sheet if you have the field assigned in parsedRows
             const formattingHebrewDate = "ה' תמוז תשפ\"ו"; 
 
             let finalHTML = `
