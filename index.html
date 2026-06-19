@@ -2,25 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Midrash Elyon Shul Publications - Live Dynamic Engine</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600;700&family=David+Libre:wght@400;500;700&display=swap');
 
-        /* Screen Presentation Styles */
+        /* Strict Screen Locks - Kills Side Scrolling Permanently */
         html, body {
-            max-width: 100vw;
-            overflow-x: hidden; /* Absolutely prevents any side-scrolling */
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             background-color: #f0f2f5;
-            margin: 0;
-            padding: 40px 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 40px;
+            padding: 40px 0;
         }
 
         .flyer-wrapper {
@@ -33,11 +35,11 @@
         /* Strict 8.5" x 11" Printable Page Container */
         .print-page {
             background-color: #ffffff;
-            width: 816px; /* Explicit 8.5in pixel width for perfect scaling */
-            height: 1056px; /* Explicit 11in pixel height for perfect scaling */
+            width: 816px; 
+            height: 1056px; 
             box-sizing: border-box;
             position: relative;
-            color: #0b2347; /* Midrash Elyon Navy */
+            color: #0b2347; 
             overflow: hidden;
             page-break-after: always;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -56,8 +58,6 @@
             height: 100%;
             box-sizing: border-box;
             position: relative;
-            
-            /* Premium Border Framing */
             border: 14px solid #0b2347;
             outline: 3px double #c5a059;
             outline-offset: -10px;
@@ -70,7 +70,6 @@
             flex: 1;
         }
 
-        /* Lock BS"D strictly to the top right inside of the borders */
         .bsd {
             font-family: 'David Libre', serif;
             font-size: 1.15rem;
@@ -82,7 +81,6 @@
             color: #c5a059;
         }
 
-        /* Split Header Grid System */
         .header-grid {
             display: grid;
             grid-template-columns: 1.2fr 1fr 1.2fr;
@@ -191,7 +189,7 @@
             white-space: nowrap;
         }
 
-        /* Boxed Dedications Container - Auto-scales for 1, 2, or 3 columns */
+        /* Boxed Dedications Container */
         .dedications-box {
             background: linear-gradient(135deg, #fdfbf7 0%, #fcf9f2 100%);
             border: 2px solid #eadeca;
@@ -233,7 +231,6 @@
 
         .dedication-entry { padding-bottom: 2px; }
         .dedication-type { font-size: clamp(0.75rem, 1.4vw, 0.85rem); font-weight: 700; margin-bottom: 2px; letter-spacing: 1.5px; color: #c5a059; text-transform: uppercase; white-space: normal; }
-        
         .dedication-text { font-size: clamp(0.75rem, 1.6vw, 0.9rem); line-height: 1.35; font-weight: 600; color: #0b2347; }
         .dedication-text strong { font-weight: 700; font-size: inherit; }
 
@@ -252,7 +249,6 @@
             box-sizing: border-box;
             background-color: #faf8f5;
             position: relative;
-            
             border: 24px solid #0b2347;
             outline: 6px double #c5a059;
             outline-offset: -18px;
@@ -273,7 +269,7 @@
         .table-dedication-block .by-line { font-family: 'Cinzel Decorative', serif; font-weight: 700; margin-top: 15px; font-size: 1.8rem; color: #c5a059; letter-spacing: 1px; text-transform: uppercase; }
         .table-text-divider { font-family: 'Cinzel Decorative', serif; font-weight: 700; font-size: 1.4rem; color: #c5a059; margin: 5px 0; letter-spacing: 2px; }
 
-        .loading-text { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #0b2347; text-align: center; width: 100%; margin-top: 150px; }
+        .loading-text { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #0b2347; text-align: center; width: 100%; margin-top: 150px; padding: 0 20px; box-sizing: border-box; }
 
         /* ==========================================================================
            PRINT AND EXACT ASPECT-RATIO MOBILE SCALING
@@ -284,25 +280,22 @@
             .flyer-wrapper { display: block; margin: 0; padding: 0; width: 100%; height: auto; }
         }
 
-        /* BULLETPROOF MOBILE TRICK:
-           Isolates the flyer so it shrinks perfectly from the top left, 
-           and uses the wrapper to hold the newly scaled height safely.
-        */
+        /* MOBILE SNAP-TO-FIT LOGIC */
         @media screen and (max-width: 850px) { 
-            body { padding: 10px 0; gap: 15px; }
+            body { padding: 15px 0; gap: 20px; }
             .flyer-wrapper {
-                width: 100vw;
-                /* Dynamically calculates the exact height needed after the shrink */
+                width: 100%;
+                /* Heights auto-calculate based on full screen width minus slight padding */
                 height: calc(1056px * (100vw / 816)); 
-                display: block; 
+                display: flex; 
+                justify-content: center;
+                overflow: hidden; /* Hard lock to prevent spillover */
             }
             .print-page {
                 position: absolute;
                 top: 0;
-                left: 0;
-                /* Shrinks the 816px layout perfectly to the width of the phone screen */
                 transform: scale(calc(100vw / 816));
-                transform-origin: top left;
+                transform-origin: top center; /* Centers the scaling directly */
                 margin: 0;
             }
         }
@@ -311,7 +304,7 @@
 <body>
 
     <div id="loading-state" class="loading-text">READING DATA FROM LIVE GOOGLE PUBLISHED EXCEL SHEET...</div>
-    <div id="wrapper" style="display: none; flex-direction: column; align-items: center; width: 100%; gap: 40px;"></div>
+    <div id="wrapper" style="display: none; flex-direction: column; align-items: center; width: 100%; gap: 30px;"></div>
 
     <script>
         const SIGNATURE_KEY = '2PACX-1vQkcfkH_BAJSdXzKzQguibMZ-I6K7drGRkLwFygZ8iDgeq3OmVTTnSPRpSmGQAp3MfbfDJjXc2XLNe7';
