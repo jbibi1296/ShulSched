@@ -8,6 +8,10 @@
         @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600;700&family=David+Libre:wght@400;500;700&display=swap');
 
         /* Strict Screen Locks - Kills Side Scrolling Permanently */
+        :root {
+            --scale: 1; /* Default scale, overridden by JS on mobile */
+        }
+
         html, body {
             width: 100%;
             max-width: 100%;
@@ -26,8 +30,7 @@
         }
 
         .flyer-wrapper {
-            position: relative;
-            width: 8.5in;
+            width: 100%;
             display: flex;
             justify-content: center;
         }
@@ -280,23 +283,15 @@
             .flyer-wrapper { display: block; margin: 0; padding: 0; width: 100%; height: auto; }
         }
 
-        /* MOBILE SNAP-TO-FIT LOGIC */
+        /* The Bulletproof Scale Engine */
         @media screen and (max-width: 850px) { 
             body { padding: 15px 0; gap: 20px; }
-            .flyer-wrapper {
-                width: 100%;
-                /* Heights auto-calculate based on full screen width minus slight padding */
-                height: calc(1056px * (100vw / 816)); 
-                display: flex; 
-                justify-content: center;
-                overflow: hidden; /* Hard lock to prevent spillover */
-            }
             .print-page {
-                position: absolute;
-                top: 0;
-                transform: scale(calc(100vw / 816));
-                transform-origin: top center; /* Centers the scaling directly */
-                margin: 0;
+                /* Uses the purely unitless --scale variable set by JavaScript */
+                transform: scale(var(--scale));
+                transform-origin: top center;
+                /* Eliminates the empty space left behind by the transform */
+                margin-bottom: calc(1056px * (var(--scale) - 1));
             }
         }
     </style>
@@ -307,6 +302,22 @@
     <div id="wrapper" style="display: none; flex-direction: column; align-items: center; width: 100%; gap: 30px;"></div>
 
     <script>
+        /* ==========================================================================
+           SCALE CONTROLLER FOR MOBILE
+           Ensures a pure, valid number is passed to the CSS transform function.
+           ========================================================================== */
+        function updateScale() {
+            const screenWidth = window.innerWidth;
+            // 816 is our flyer width. We subtract 30px to give it a little breathing room on the edges.
+            const scale = screenWidth < 850 ? (screenWidth - 30) / 816 : 1;
+            document.documentElement.style.setProperty('--scale', scale);
+        }
+        window.addEventListener('resize', updateScale);
+        updateScale(); // Run immediately on load
+
+        /* ==========================================================================
+           DATA FETCH ENGINE
+           ========================================================================== */
         const SIGNATURE_KEY = '2PACX-1vQkcfkH_BAJSdXzKzQguibMZ-I6K7drGRkLwFygZ8iDgeq3OmVTTnSPRpSmGQAp3MfbfDJjXc2XLNe7';
         const DIRECT_CSV_FEED = `https://docs.google.com/spreadsheets/d/e/${SIGNATURE_KEY}/pub?output=csv&sheet=WebsiteInfo`;
 
@@ -354,6 +365,7 @@
         function processSpreadsheetPayload(dateEnglish, parshaHebrew, candleLighting, rawDedicationsText) {
             const textLines = rawDedicationsText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
             
+            // Your comprehensive dictionary map for parsing variations!
             const categoryMap = {
                 "SHABBAT KIDDUSH": "Shabbat Kiddush",
                 "SUNDAY BREAKFAST": "Sunday Breakfast",
@@ -509,6 +521,9 @@
             const applicationWrapper = document.getElementById('wrapper');
             applicationWrapper.innerHTML = finalHTML;
             applicationWrapper.style.display = 'flex';
+            
+            // Trigger a scale update one final time just in case DOM injection affected scrollbars
+            updateScale();
         }
     </script>
 </body>
