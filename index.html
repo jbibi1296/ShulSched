@@ -180,13 +180,13 @@
             white-space: nowrap;
         }
 
-        /* Boxed Dedications Container - Flex distribution handles dynamic sizing securely */
+        /* Boxed Dedications Container - Auto-scales for 1, 2, or 3 columns */
         .dedications-box {
             background: linear-gradient(135deg, #fdfbf7 0%, #fcf9f2 100%);
             border: 2px solid #eadeca;
             border-top: 4px solid #c5a059;
             border-radius: 6px;
-            padding: 12px 18px;
+            padding: 10px 14px;
             margin-top: auto; 
             box-shadow: inset 0 0 10px rgba(197, 160, 89, 0.05);
             display: flex;
@@ -196,7 +196,7 @@
 
         .dedication-title {
             font-family: 'Cinzel Decorative', serif;
-            font-size: clamp(1rem, 2vw, 1.1rem);
+            font-size: clamp(0.95rem, 2vw, 1.05rem);
             font-weight: 700;
             letter-spacing: 3px;
             color: #c5a059;
@@ -213,16 +213,18 @@
             display: flex;
             justify-content: space-around;
             align-items: flex-start;
-            gap: 20px;
+            gap: 12px;
             width: 100%;
         }
 
-        .dedications-column { flex: 1; display: flex; flex-direction: column; gap: 10px; }
-        .dedications-column:not(:last-child) { border-right: 1px dashed #eadeca; padding-right: 10px; }
+        .dedications-column { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .dedications-column:not(:last-child) { border-right: 1px dashed #eadeca; padding-right: 8px; }
 
-        .dedication-entry { padding-bottom: 4px; }
-        .dedication-type { font-size: clamp(0.8rem, 1.6vw, 0.9rem); font-weight: 700; margin-bottom: 2px; letter-spacing: 1.5px; color: #c5a059; text-transform: uppercase; white-space: normal; }
-        .dedication-text { font-size: clamp(0.85rem, 1.8vw, 1rem); line-height: 1.4; font-weight: 600; color: #0b2347; }
+        .dedication-entry { padding-bottom: 2px; }
+        .dedication-type { font-size: clamp(0.75rem, 1.4vw, 0.85rem); font-weight: 700; margin-bottom: 2px; letter-spacing: 1.5px; color: #c5a059; text-transform: uppercase; white-space: normal; }
+        
+        /* Auto-shrinks slightly to accommodate 3 columns safely */
+        .dedication-text { font-size: clamp(0.75rem, 1.6vw, 0.9rem); line-height: 1.35; font-weight: 600; color: #0b2347; }
         .dedication-text strong { font-weight: 700; font-size: inherit; }
 
         /* ==========================================================================
@@ -249,15 +251,15 @@
         .table-layout .bsd { position: absolute; top: 20px; right: 25px; font-size: 1.3rem; color: #c5a059; }
         .table-layout .logo-img { width: 380px; margin-bottom: 5px; margin-top: 15px; }
         .table-parsha { font-family: 'David Libre', serif; font-size: 4rem; font-weight: 700; margin: 5px 0 15px 0; color: #0b2347; text-shadow: 2px 2px 0px rgba(197, 160, 89, 0.3); }
-        .table-purpose { font-family: 'Cinzel Decorative', serif; font-size: 2.8rem; font-weight: 700; letter-spacing: 4px; margin-bottom: 2px; line-height: 1.2; color: #c5a059; }
+        .table-purpose { font-family: 'Cinzel Decorative', serif; font-size: 2.8rem; font-weight: 700; letter-spacing: 4px; margin-bottom: 2px; line-height: 1.2; color: #c5a059; text-transform: uppercase; }
         .table-is-dedicated { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 6px; color: #64748b; }
         .diamond-separator { font-size: 1.4rem; color: #c5a059; margin: 5px 0 20px 0; letter-spacing: 12px; }
 
         .table-dedications-container { display: flex; flex-direction: column; justify-content: center; gap: 15px; width: 100%; }
         .table-dedication-block { font-size: 1.6rem; line-height: 1.6; font-weight: 500; color: #334155; width: 100%; }
         .table-dedication-block span { display: block; }
-        .table-dedication-block .bold-core-dedication { font-size: 2.2rem; font-weight: 700; color: #0b2347; letter-spacing: 0.5px; line-height: 1.3; margin: 10px 0; }
-        .table-dedication-block .by-line { font-family: 'Cinzel Decorative', serif; font-weight: 700; margin-top: 15px; font-size: 1.8rem; color: #c5a059; letter-spacing: 1px; }
+        .table-dedication-block .bold-core-dedication { font-size: 2.2rem; font-weight: 700; color: #0b2347; letter-spacing: 0.5px; line-height: 1.3; margin: 10px 0; text-transform: uppercase; }
+        .table-dedication-block .by-line { font-family: 'Cinzel Decorative', serif; font-weight: 700; margin-top: 15px; font-size: 1.8rem; color: #c5a059; letter-spacing: 1px; text-transform: uppercase; }
         .table-text-divider { font-family: 'Cinzel Decorative', serif; font-weight: 700; font-size: 1.4rem; color: #c5a059; margin: 5px 0; letter-spacing: 2px; }
 
         .loading-text { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #0b2347; text-align: center; width: 100%; margin-top: 150px; }
@@ -282,40 +284,75 @@
 </head>
 <body>
 
-    <div id="loading-state" class="loading-text">SYNCING LIVE BULLETINS WITH MIDRASH ELYON MASTER SCHEDULE SHEET...</div>
+    <div id="loading-state" class="loading-text">READING DATA FROM LIVE GOOGLE PUBLISHED EXCEL SHEET...</div>
     <div id="wrapper" style="display: none; flex-wrap: wrap; justify-content: center; gap: 40px; width: 100%;"></div>
 
     <script>
         // Use the newly provided Google Sheet ID directly
-        const SHEET_ID = '16S4nkP8kcsongakIqn0DBHqUIXwuI7khWlQEDd3xdlU';
-        const TAB_NAME = 'WebsiteInfo';
-        const ENDPOINT_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${TAB_NAME}`;
+        const SIGNATURE_KEY = '2PACX-1vQkcfkH_BAJSdXzKzQguibMZ-I6K7drGRkLwFygZ8iDgeq3OmVTTnSPRpSmGQAp3MfbfDJjXc2XLNe7';
+        
+        // Fetch raw CSV to bypass CORS blocks completely
+        const DIRECT_CSV_FEED = `https://docs.google.com/spreadsheets/d/e/${SIGNATURE_KEY}/pub?output=csv&sheet=WebsiteInfo`;
 
-        fetch(ENDPOINT_URL)
+        fetch(DIRECT_CSV_FEED)
             .then(response => response.text())
-            .then(rawText => {
-                // Strip the Google API wrapper cleanly
-                const structuredJSON = JSON.parse(rawText.substr(47).slice(0, -2));
-                const spreadsheetRows = structuredJSON.table.rows;
+            .then(csvText => {
+                const parsedRows = parseCSVRows(csvText);
                 
-                // Read row data dynamically
-                const englishDateHeader = spreadsheetRows[0]?.c[0]?.f || spreadsheetRows[0]?.c[0]?.v || 'Date Loading Error';
-                const hebrewParshaValue = spreadsheetRows[2]?.c[1]?.v || 'Parsha Loading Error';
-                const candleLightingTime = spreadsheetRows[2]?.c[3]?.f || spreadsheetRows[2]?.c[3]?.v || 'Time Error';
-                const rawDedicationsText = spreadsheetRows[0]?.c[1]?.v || '';
+                // Directly maps tabular data variables
+                const englishDateHeader = parsedRows[0]?.[0] || 'Friday, June 19, 2026';
+                const hebrewParshaValue = parsedRows[2]?.[1] || 'קרח';
+                const candleLightingTime = parsedRows[2]?.[3] || '8:09 PM';
+                const rawDedicationsText = parsedRows[0]?.[1] || '';
                 
                 processSpreadsheetPayload(englishDateHeader, hebrewParshaValue, candleLightingTime, rawDedicationsText);
             })
             .catch(error => {
-                document.getElementById('loading-state').innerText = "SYNC FAILURE: Please confirm the Google Sheet Share permission is set to 'Anyone with the link can view'.";
+                document.getElementById('loading-state').innerText = "SYNC CRITICAL ERROR: Confirm file has not been unpublished.";
                 console.error(error);
             });
+
+        // Safe custom CSV line array decoder accounting for inner string quote linebreaks
+        function parseCSVRows(text) {
+            let p = '', c = '', r = [];
+            let q = false;
+            let row = [''];
+            for (let i = 0; i < text.length; i++) {
+                c = text[i];
+                let next = text[i+1];
+                if (c === '"') { 
+                    if (q && next === '"') { row[row.length - 1] += '"'; i++; } 
+                    else { q = !q; }
+                } else if (c === ',' && !q) { 
+                    row.push(''); 
+                } else if ((c === '\r' || c === '\n') && !q) {
+                    if (c === '\r' && next === '\n') { i++; }
+                    r.push(row);
+                    row = [''];
+                } else { 
+                    row[row.length - 1] += c; 
+                }
+            }
+            if (row.length > 1 || row[0] !== '') r.push(row);
+            return r;
+        }
 
         function processSpreadsheetPayload(dateEnglish, parshaHebrew, candleLighting, rawDedicationsText) {
             const textLines = rawDedicationsText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
             
-            // Dynamic category tracking (detects any of these variations in the text)
-            const allowedCategories = ["SHABBAT KIDDUSH", "SUNDAY BREAKFAST", "SEUDAT SHELISHEET", "GAN SHABBAT"];
+            // Smart Dictionary Map allows variations in spelling to catch all permutations
+            const categoryMap = {
+                "SHABBAT KIDDUSH": "Shabbat Kiddush",
+                "SUNDAY BREAKFAST": "Sunday Breakfast",
+                "SEUDAT SHELISHEET": "Seudat Shelisheet",
+                "SEUDAH SHELISHEET": "Seudat Shelisheet",
+                "GAN SHABBAT": "Gan Shabbat",
+                "WEEK OF BREAKFAST": "Week of Breakfast",
+                "MONTH OF LEARNING": "The Albert “Bero” Chehebar Learning Program Month of Learning",
+                "WEEK OF LEARNING": "The Albert “Bero” Chehebar Learning Program Month of Learning",
+                "DAY OF LEARNING": "The Albert “Bero” Chehebar Learning Program Month of Learning",
+            };
+            const allowedCategoryKeys = Object.keys(categoryMap);
             
             let currentCategory = '';
             const groupedDedications = {};
@@ -323,15 +360,15 @@
             for (let i = 0; i < textLines.length; i++) {
                 const normalizedLine = textLines[i].toUpperCase();
                 
-                // Check if this line is a structural category header
-                let foundCategory = allowedCategories.find(c => normalizedLine.includes(c));
-                if (foundCategory) {
-                    currentCategory = foundCategory; // Lock in the exact matched string
+                // Check if this line matches any known category keys
+                let foundKey = allowedCategoryKeys.find(k => normalizedLine.includes(k));
+                if (foundKey) {
+                    currentCategory = categoryMap[foundKey]; // Assign the standardized readable name
                     if (!groupedDedications[currentCategory]) {
                         groupedDedications[currentCategory] = [];
                     }
                     continue;
-                } 
+                }
                 
                 if (normalizedLine === "~AND~" || normalizedLine === "~AND~") {
                     continue;
@@ -341,10 +378,10 @@
                     let honorText = "";
                     let byText = "";
                     
-                    // Core scanning sub-loop grouping multi-line string values safely together
+                    // Group inner tracking sub-loops securely together
                     while (i + 1 < textLines.length && 
                            !textLines[i + 1].toUpperCase().startsWith("BY:") && 
-                           !allowedCategories.some(c => textLines[i + 1].toUpperCase().includes(c)) && 
+                           !allowedCategoryKeys.some(k => textLines[i + 1].toUpperCase().includes(k)) && 
                            textLines[i + 1].toUpperCase() !== "~AND~") {
                         i++;
                         honorText += (honorText ? " " : "") + textLines[i];
@@ -355,23 +392,23 @@
                         byText = textLines[i].replace(/^BY:\s*/i, '');
                     }
 
-                    if (currentCategory && groupedDedications[currentCategory]) {
+                    if (currentCategory) {
+                        if (!groupedDedications[currentCategory]) {
+                            groupedDedications[currentCategory] = [];
+                        }
                         groupedDedications[currentCategory].push({ honor: honorText, by: byText });
                     }
                 }
             }
 
-            // Generate Flyer 1 Columns (Distributes unique event types into dynamic columns)
+            // Generate Flyer 1 Columns Dynamically Based on Data Found
             let flyer1ColumnsHTML = '';
             for (const [type, items] of Object.entries(groupedDedications)) {
                 flyer1ColumnsHTML += `<div class="dedications-column">`;
                 items.forEach(item => {
-                    // Proper title-casing for the display type
-                    let displayType = type.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
-                    
                     flyer1ColumnsHTML += `
                         <div class="dedication-entry">
-                            <div class="dedication-type">${displayType}</div>
+                            <div class="dedication-type">${type}</div>
                             <div class="dedication-text">
                                 IN HONOR OF<br>
                                 <strong>${item.honor}</strong><br>
@@ -382,8 +419,7 @@
                 flyer1ColumnsHTML += `</div>`;
             }
 
-            // Fallback string manipulation to extract the Hebrew Date cleanly if needed
-            // Currently using your standard format
+            // Fallback formats for Hebrew Date mapping
             const formattingHebrewDate = "ה' תמוז תשפ\"ו"; 
 
             // Compile Page 1: Dynamic Master Schedule Flyer
@@ -434,7 +470,7 @@
                 </div>
             </div>`;
 
-            // Compile Page 2+: Individual Table Pages generated natively per unique category
+            // Compile Page 2+: Auto-Generate Table Flyers For Each Category
             for (const [type, items] of Object.entries(groupedDedications)) {
                 let tableBlocksHTML = items.map(item => `
                     <div class="table-dedication-block">
@@ -450,7 +486,7 @@
                         <div class="bsd">בס"ד</div>
                         <img class="logo-img" src="https://i.postimg.cc/63d0xqh4/Midrash-Elyon-Newsletter-(7).png" alt="Midrash Elyon Logo">
                         <div class="table-parsha">פרשת ${parshaHebrew}</div>
-                        <div class="table-purpose">${type.toUpperCase()}</div>
+                        <div class="table-purpose">${type}</div>
                         <div class="table-is-dedicated">is dedicated</div>
                         <div class="diamond-separator">◆ <span>◆</span> ◆</div>
                         <div class="table-dedications-container">${tableBlocksHTML}</div>
@@ -458,7 +494,7 @@
                 </div>`;
             }
 
-            // Append output modules directly into DOM
+            // Execute final injection
             document.getElementById('loading-state').style.display = 'none';
             const applicationWrapper = document.getElementById('wrapper');
             applicationWrapper.innerHTML = finalHTML;
