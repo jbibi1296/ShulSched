@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Midrash Elyon Shul Publications - Dynamic Engine</title>
+    <title>Midrash Elyon Shul Publications - Live Dynamic Engine</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600;700&family=David+Libre:wght@400;500;700&display=swap');
 
@@ -92,9 +92,7 @@
             white-space: nowrap;
         }
 
-        .grid-center {
-            text-align: center;
-        }
+        .grid-center { text-align: center; }
 
         .grid-right {
             font-size: 0.95rem; 
@@ -153,10 +151,7 @@
         }
         .section-title::after { --dir: left; }
 
-        .time-box {
-            padding: 0 10px;
-            margin-bottom: 2px;
-        }
+        .time-box { padding: 0 10px; margin-bottom: 2px; }
 
         .time-row {
             display: flex;
@@ -185,7 +180,7 @@
             white-space: nowrap;
         }
 
-        /* Boxed Dedications Container */
+        /* Boxed Dedications Container - Flex distribution handles dynamic sizing securely */
         .dedications-box {
             background: linear-gradient(135deg, #fdfbf7 0%, #fcf9f2 100%);
             border: 2px solid #eadeca;
@@ -212,10 +207,7 @@
             gap: 10px;
             white-space: nowrap;
         }
-        .dedication-title::before, .dedication-title::after {
-            content: '◆';
-            font-size: 8px;
-        }
+        .dedication-title::before, .dedication-title::after { content: '◆'; font-size: 8px; }
 
         .dedications-columns {
             display: flex;
@@ -225,42 +217,13 @@
             width: 100%;
         }
 
-        .dedications-column {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        .dedications-column { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+        .dedications-column:not(:last-child) { border-right: 1px dashed #eadeca; padding-right: 10px; }
 
-        .dedications-column:not(:last-child) {
-            border-right: 1px dashed #eadeca;
-            padding-right: 10px;
-        }
-
-        .dedication-entry {
-            padding-bottom: 4px;
-        }
-
-        .dedication-type {
-            font-size: clamp(0.8rem, 1.6vw, 0.9rem);
-            font-weight: 700;
-            margin-bottom: 2px;
-            letter-spacing: 1.5px;
-            color: #c5a059;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-
-        .dedication-text {
-            font-size: 1rem;
-            line-height: 1.4;
-            font-weight: 600;
-            color: #0b2347;
-        }
-        .dedication-text strong {
-            font-weight: 700;
-            font-size: inherit;
-        }
+        .dedication-entry { padding-bottom: 4px; }
+        .dedication-type { font-size: clamp(0.8rem, 1.6vw, 0.9rem); font-weight: 700; margin-bottom: 2px; letter-spacing: 1.5px; color: #c5a059; text-transform: uppercase; white-space: normal; }
+        .dedication-text { font-size: clamp(0.85rem, 1.8vw, 1rem); line-height: 1.4; font-weight: 600; color: #0b2347; }
+        .dedication-text strong { font-weight: 700; font-size: inherit; }
 
         /* ==========================================================================
            TEMPLATE 2: TABLE DEDICATION FLYER
@@ -283,99 +246,21 @@
             outline-offset: -18px;
         }
 
-        .table-layout .bsd {
-            position: absolute;
-            top: 20px;
-            right: 25px;
-            font-size: 1.3rem;
-            color: #c5a059;
-        }
+        .table-layout .bsd { position: absolute; top: 20px; right: 25px; font-size: 1.3rem; color: #c5a059; }
+        .table-layout .logo-img { width: 380px; margin-bottom: 5px; margin-top: 15px; }
+        .table-parsha { font-family: 'David Libre', serif; font-size: 4rem; font-weight: 700; margin: 5px 0 15px 0; color: #0b2347; text-shadow: 2px 2px 0px rgba(197, 160, 89, 0.3); }
+        .table-purpose { font-family: 'Cinzel Decorative', serif; font-size: 2.8rem; font-weight: 700; letter-spacing: 4px; margin-bottom: 2px; line-height: 1.2; color: #c5a059; }
+        .table-is-dedicated { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 6px; color: #64748b; }
+        .diamond-separator { font-size: 1.4rem; color: #c5a059; margin: 5px 0 20px 0; letter-spacing: 12px; }
 
-        .table-layout .logo-img {
-            width: 380px;
-            margin-bottom: 5px;
-            margin-top: 15px;
-        }
-
-        .table-parsha {
-            font-family: 'David Libre', serif;
-            font-size: 4rem;
-            font-weight: 700;
-            margin: 5px 0 15px 0;
-            color: #0b2347;
-            text-shadow: 2px 2px 0px rgba(197, 160, 89, 0.3);
-        }
-
-        .table-purpose {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 2.8rem;
-            font-weight: 700;
-            letter-spacing: 4px;
-            margin-bottom: 2px;
-            line-height: 1.2;
-            color: #c5a059;
-        }
-
-        .table-is-dedicated {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 6px;
-            color: #64748b;
-        }
-
-        .diamond-separator {
-            font-size: 1.4rem;
-            color: #c5a059;
-            margin: 5px 0 20px 0;
-            letter-spacing: 12px;
-        }
-
-        .table-dedications-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 15px;
-            width: 100%;
-        }
-
-        .table-dedication-block {
-            font-size: 1.6rem;
-            line-height: 1.6;
-            font-weight: 500;
-            color: #334155;
-            width: 100%;
-        }
-
+        .table-dedications-container { display: flex; flex-direction: column; justify-content: center; gap: 15px; width: 100%; }
+        .table-dedication-block { font-size: 1.6rem; line-height: 1.6; font-weight: 500; color: #334155; width: 100%; }
         .table-dedication-block span { display: block; }
+        .table-dedication-block .bold-core-dedication { font-size: 2.2rem; font-weight: 700; color: #0b2347; letter-spacing: 0.5px; line-height: 1.3; margin: 10px 0; }
+        .table-dedication-block .by-line { font-family: 'Cinzel Decorative', serif; font-weight: 700; margin-top: 15px; font-size: 1.8rem; color: #c5a059; letter-spacing: 1px; }
+        .table-text-divider { font-family: 'Cinzel Decorative', serif; font-weight: 700; font-size: 1.4rem; color: #c5a059; margin: 5px 0; letter-spacing: 2px; }
 
-        .table-dedication-block .bold-core-dedication {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #0b2347;
-            letter-spacing: 0.5px;
-            line-height: 1.3;
-            margin: 10px 0;
-        }
-        
-        .table-dedication-block .by-line {
-            font-family: 'Cinzel Decorative', serif;
-            font-weight: 700;
-            margin-top: 15px;
-            font-size: 1.8rem;
-            color: #c5a059;
-            letter-spacing: 1px;
-        }
-
-        .table-text-divider {
-            font-family: 'Cinzel Decorative', serif;
-            font-weight: 700;
-            font-size: 1.4rem;
-            color: #c5a059;
-            margin: 5px 0;
-            letter-spacing: 2px;
-        }
+        .loading-text { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #0b2347; text-align: center; width: 100%; margin-top: 150px; }
 
         /* ==========================================================================
            PRINT AND EXACT ASPECT-RATIO MOBILE SCALING
@@ -386,11 +271,7 @@
         }
 
         @media screen and (max-width: 836px) { 
-            body {
-                padding: 10px 0;
-                gap: 0; 
-                overflow-x: hidden;
-            }
+            body { padding: 10px 0; gap: 0; overflow-x: hidden; }
             .print-page {
                 transform: scale(calc((100vw - 20px) / 816));
                 transform-origin: top center;
@@ -401,61 +282,96 @@
 </head>
 <body>
 
-    <!-- Container where the JavaScript engine will inject the dynamic flyers -->
-    <div id="wrapper" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; width: 100%;"></div>
+    <div id="loading-state" class="loading-text">SYNCING LIVE BULLETINS WITH MIDRASH ELYON MASTER SCHEDULE SHEET...</div>
+    <div id="wrapper" style="display: none; flex-wrap: wrap; justify-content: center; gap: 40px; width: 100%;"></div>
 
     <script>
-        /* ==========================================================================
-           WEEKLY CONFIGURATION DATA
-           Simply update the variables and dedications array below!
-           ========================================================================== */
-        const weeklyData = {
-            parshaHebrew: "קרח",
-            dateHebrew: "ה' תמוז תשפ\"ו",
-            dateEnglish: "JUNE 19-20, 2026",
-            candleLighting: "8:09PM",
-            
-            // Add as many dedications here as needed (Shabbat Kiddush, Sunday Breakfast, Seudat Shelisheet, Gan Shabbat, etc.)
-            dedications: [
-                {
-                    type: "Shabbat Kiddush",
-                    honor: "MY JACKIE & HIS WIFE DANIELLE<br>ON THEIR NEW BABY GIRL JULIE",
-                    by: "RALPH KASSIN"
-                },
-                {
-                    type: "Shabbat Kiddush",
-                    honor: "MY WIFE",
-                    by: "SAMMY SABBAGH"
-                },
-                {
-                    type: "Sunday Breakfast",
-                    honor: "RABBI DAVID HABER<br>FOR INSPIRATIONAL SUMMER LEARNING",
-                    by: "THE CONGREGATION"
-                }
-            ]
-        };
+        // Use the newly provided Google Sheet ID directly
+        const SHEET_ID = '16S4nkP8kcsongakIqn0DBHqUIXwuI7khWlQEDd3xdlU';
+        const TAB_NAME = 'WebsiteInfo';
+        const ENDPOINT_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${TAB_NAME}`;
 
-        /* ==========================================================================
-           AUTOMATED FLYER GENERATION ENGINE
-           ========================================================================== */
-        function generateFlyers(data) {
-            // Group dedications by their type automatically
-            const groupedDedications = {};
-            data.dedications.forEach(item => {
-                if (!groupedDedications[item.type]) {
-                    groupedDedications[item.type] = [];
-                }
-                groupedDedications[item.type].push(item);
+        fetch(ENDPOINT_URL)
+            .then(response => response.text())
+            .then(rawText => {
+                // Strip the Google API wrapper cleanly
+                const structuredJSON = JSON.parse(rawText.substr(47).slice(0, -2));
+                const spreadsheetRows = structuredJSON.table.rows;
+                
+                // Read row data dynamically
+                const englishDateHeader = spreadsheetRows[0]?.c[0]?.f || spreadsheetRows[0]?.c[0]?.v || 'Date Loading Error';
+                const hebrewParshaValue = spreadsheetRows[2]?.c[1]?.v || 'Parsha Loading Error';
+                const candleLightingTime = spreadsheetRows[2]?.c[3]?.f || spreadsheetRows[2]?.c[3]?.v || 'Time Error';
+                const rawDedicationsText = spreadsheetRows[0]?.c[1]?.v || '';
+                
+                processSpreadsheetPayload(englishDateHeader, hebrewParshaValue, candleLightingTime, rawDedicationsText);
+            })
+            .catch(error => {
+                document.getElementById('loading-state').innerText = "SYNC FAILURE: Please confirm the Google Sheet Share permission is set to 'Anyone with the link can view'.";
+                console.error(error);
             });
 
-            // Generate Flyer 1 Columns (Distributes unique event types into side-by-side columns)
+        function processSpreadsheetPayload(dateEnglish, parshaHebrew, candleLighting, rawDedicationsText) {
+            const textLines = rawDedicationsText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+            
+            // Dynamic category tracking (detects any of these variations in the text)
+            const allowedCategories = ["SHABBAT KIDDUSH", "SUNDAY BREAKFAST", "SEUDAT SHELISHEET", "GAN SHABBAT"];
+            
+            let currentCategory = '';
+            const groupedDedications = {};
+
+            for (let i = 0; i < textLines.length; i++) {
+                const normalizedLine = textLines[i].toUpperCase();
+                
+                // Check if this line is a structural category header
+                let foundCategory = allowedCategories.find(c => normalizedLine.includes(c));
+                if (foundCategory) {
+                    currentCategory = foundCategory; // Lock in the exact matched string
+                    if (!groupedDedications[currentCategory]) {
+                        groupedDedications[currentCategory] = [];
+                    }
+                    continue;
+                } 
+                
+                if (normalizedLine === "~AND~" || normalizedLine === "~AND~") {
+                    continue;
+                }
+
+                if (normalizedLine.startsWith("IN HONOR OF")) {
+                    let honorText = "";
+                    let byText = "";
+                    
+                    // Core scanning sub-loop grouping multi-line string values safely together
+                    while (i + 1 < textLines.length && 
+                           !textLines[i + 1].toUpperCase().startsWith("BY:") && 
+                           !allowedCategories.some(c => textLines[i + 1].toUpperCase().includes(c)) && 
+                           textLines[i + 1].toUpperCase() !== "~AND~") {
+                        i++;
+                        honorText += (honorText ? " " : "") + textLines[i];
+                    }
+                    
+                    if (i + 1 < textLines.length && textLines[i + 1].toUpperCase().startsWith("BY:")) {
+                        i++;
+                        byText = textLines[i].replace(/^BY:\s*/i, '');
+                    }
+
+                    if (currentCategory && groupedDedications[currentCategory]) {
+                        groupedDedications[currentCategory].push({ honor: honorText, by: byText });
+                    }
+                }
+            }
+
+            // Generate Flyer 1 Columns (Distributes unique event types into dynamic columns)
             let flyer1ColumnsHTML = '';
             for (const [type, items] of Object.entries(groupedDedications)) {
                 flyer1ColumnsHTML += `<div class="dedications-column">`;
                 items.forEach(item => {
+                    // Proper title-casing for the display type
+                    let displayType = type.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+                    
                     flyer1ColumnsHTML += `
                         <div class="dedication-entry">
-                            <div class="dedication-type">${type}</div>
+                            <div class="dedication-type">${displayType}</div>
                             <div class="dedication-text">
                                 IN HONOR OF<br>
                                 <strong>${item.honor}</strong><br>
@@ -466,83 +382,50 @@
                 flyer1ColumnsHTML += `</div>`;
             }
 
-            // Build Flyer 1: Master Schedule
+            // Fallback string manipulation to extract the Hebrew Date cleanly if needed
+            // Currently using your standard format
+            const formattingHebrewDate = "ה' תמוז תשפ\"ו"; 
+
+            // Compile Page 1: Dynamic Master Schedule Flyer
             let finalHTML = `
             <div class="print-page">
                 <div class="schedule-layout">
                     <div class="bsd">בס"ד</div>
                     <div class="schedule-content-container">
                         <div class="header-grid">
-                            <div class="grid-left">
-                                פרשת ${data.parshaHebrew}<br>
-                                ${data.dateHebrew}
-                            </div>
+                            <div class="grid-left">פרשת ${parshaHebrew}<br>${formattingHebrewDate}</div>
                             <div class="grid-center">
                                 <img class="logo-img" src="https://i.postimg.cc/63d0xqh4/Midrash-Elyon-Newsletter-(7).png" alt="Midrash Elyon Logo">
                                 <div class="logo-deal">DEAL</div>
                             </div>
-                            <div class="grid-right">
-                                SHABBAT SCHEDULE<br>
-                                ${data.dateEnglish}<br>
-                                82 NORWOOD AVE<br>
-                                <span class="entrance-note">(POPLAR ENTRANCE)</span>
-                            </div>
+                            <div class="grid-right">SHABBAT SCHEDULE<br>${dateEnglish}<br>82 NORWOOD AVE<br><span class="entrance-note">(POPLAR ENTRANCE)</span></div>
                         </div>
-
                         <div class="time-box">
                             <div class="section-title">Shabbat Schedule</div>
-                            <div class="time-row highlight">
-                                <span>CANDLE LIGHTING</span>
-                                <span>${data.candleLighting}</span>
-                            </div>
-                            <div class="time-row">
-                                <span>KORBANOT</span>
-                                <span>7:00AM</span>
-                            </div>
-                            <div class="time-row">
-                                <span>HASHEM MELECH</span>
-                                <span>7:15AM</span>
-                            </div>
+                            <div class="time-row highlight"><span>CANDLE LIGHTING</span><span>${candleLighting}</span></div>
+                            <div class="time-row"><span>KORBANOT</span><span>7:00AM</span></div>
+                            <div class="time-row"><span>HASHEM MELECH</span><span>7:15AM</span></div>
                             <div class="row-full">FOLLOWED BY AN EXQUISITE KIDDUSH AND CLASS</div>
                         </div>
-
                         <div class="time-box">
                             <div class="section-title">Sunday Schedule</div>
-                            <div class="time-row">
-                                <span>SHACHARIT</span>
-                                <span>8:00AM</span>
-                            </div>
+                            <div class="time-row"><span>SHACHARIT</span><span>8:00AM</span></div>
                             <div class="row-full">FOLLOWED BY BREAKFAST & CLASS</div>
                         </div>
-
                         <div class="time-box">
                             <div class="section-title">Weekday Schedule</div>
-                            <div class="time-row">
-                                <span>GEMARA CLASSES</span>
-                                <span>6:15AM</span>
-                            </div>
-                            <div class="time-row">
-                                <span>SHACHARIT</span>
-                                <span>7:15AM</span>
-                            </div>
+                            <div class="time-row"><span>GEMARA CLASSES</span><span>6:15AM</span></div>
+                            <div class="time-row"><span>SHACHARIT</span><span>7:15AM</span></div>
                             <div class="row-full">FOLLOWED BY BREAKFAST & LEARNING</div>
                         </div>
-
                         <div class="time-box">
                             <div class="section-title">Learning Program</div>
-                            <div class="time-row" style="justify-content: center; font-size: 1.05rem; font-weight: 700; margin-bottom: 2px; border: none;">
-                                MONDAY - FRIDAY MORNING
-                            </div>
-                            <div class="row-full" style="font-weight: 600; margin-bottom: 2px; color: #0b2347;">
-                                MULTIPLE LEARNING GROUPS AT 6:30AM & 8:00AM
-                            </div>
-                            <div class="row-full" style="font-size: 0.95rem; color: #4b5563;">
-                                TO JOIN A CLASS, PLEASE REACH OUT TO RABBI DAVID HABER
-                            </div>
+                            <div class="time-row" style="justify-content: center; font-size: 1.05rem; font-weight: 700; margin-bottom: 2px; border: none;">MONDAY - FRIDAY MORNING</div>
+                            <div class="row-full" style="font-weight: 600; margin-bottom: 2px; color: #0b2347;">MULTIPLE LEARNING GROUPS AT 6:30AM & 8:00AM</div>
+                            <div class="row-full" style="font-size: 0.95rem; color: #4b5563;">TO JOIN A CLASS, PLEASE REACH OUT TO RABBI DAVID HABER</div>
                         </div>
                     </div>
-
-                    <div class="dedications-box">
+                    <div class="dedications-box" ${Object.keys(groupedDedications).length === 0 ? 'style="display:none;"' : ''}>
                         <div class="dedication-title">Weekly Dedications</div>
                         <div class="dedications-columns">
                             ${flyer1ColumnsHTML}
@@ -551,7 +434,7 @@
                 </div>
             </div>`;
 
-            // Build Flyer 2+: Individual Table Pages generated natively per unique category
+            // Compile Page 2+: Individual Table Pages generated natively per unique category
             for (const [type, items] of Object.entries(groupedDedications)) {
                 let tableBlocksHTML = items.map(item => `
                     <div class="table-dedication-block">
@@ -566,7 +449,7 @@
                     <div class="table-layout">
                         <div class="bsd">בס"ד</div>
                         <img class="logo-img" src="https://i.postimg.cc/63d0xqh4/Midrash-Elyon-Newsletter-(7).png" alt="Midrash Elyon Logo">
-                        <div class="table-parsha">פרשת ${data.parshaHebrew}</div>
+                        <div class="table-parsha">פרשת ${parshaHebrew}</div>
                         <div class="table-purpose">${type.toUpperCase()}</div>
                         <div class="table-is-dedicated">is dedicated</div>
                         <div class="diamond-separator">◆ <span>◆</span> ◆</div>
@@ -575,13 +458,12 @@
                 </div>`;
             }
 
-            // Render to DOM
-            document.getElementById('wrapper').innerHTML = finalHTML;
+            // Append output modules directly into DOM
+            document.getElementById('loading-state').style.display = 'none';
+            const applicationWrapper = document.getElementById('wrapper');
+            applicationWrapper.innerHTML = finalHTML;
+            applicationWrapper.style.display = 'flex';
         }
-
-        // Initialize engine
-        generateFlyers(weeklyData);
-
     </script>
 </body>
 </html>
