@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Midrash Elyon Shul Publications - Live Dynamic Engine</title>
+    <title>Midrash Elyon Shul Publications - Perfect Mobile Scale</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600;700&family=David+Libre:wght@400;500;700&display=swap');
 
-        /* Strict Screen Locks - Kills Side Scrolling Permanently */
-        :root {
-            --scale: 1; /* Default scale, overridden by JS on mobile */
-        }
-
+        /* Strict Screen Locks */
         html, body {
             width: 100%;
             max-width: 100%;
@@ -30,16 +26,20 @@
         }
 
         .flyer-wrapper {
-            width: 100%;
+            position: relative;
+            width: 8.5in;
             display: flex;
             justify-content: center;
         }
 
-        /* Strict 8.5" x 11" Printable Page Container */
+        /* Strict 8.5" x 11" Printable Page Container - CSS LOCKED */
         .print-page {
             background-color: #ffffff;
-            width: 816px; 
-            height: 1056px; 
+            width: 816px !important;
+            min-width: 816px !important;
+            max-width: none !important;
+            height: 1056px !important; 
+            min-height: 1056px !important;
             box-sizing: border-box;
             position: relative;
             color: #0b2347; 
@@ -66,172 +66,34 @@
             outline-offset: -10px;
         }
 
-        .schedule-content-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            flex: 1;
-        }
+        .schedule-content-container { display: flex; flex-direction: column; justify-content: flex-start; flex: 1; }
+        .bsd { font-family: 'David Libre', serif; font-size: 1.15rem; position: absolute; top: 15px; right: 20px; margin: 0; font-weight: 700; color: #c5a059; }
 
-        .bsd {
-            font-family: 'David Libre', serif;
-            font-size: 1.15rem;
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            margin: 0;
-            font-weight: 700;
-            color: #c5a059;
-        }
-
-        .header-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr 1.2fr;
-            align-items: center; 
-            margin-top: 15px;
-            border-bottom: 2px solid #0b2347;
-            padding-bottom: 12px;
-            gap: 10px;
-        }
-
-        .grid-left {
-            font-family: 'David Libre', serif;
-            font-size: 1.35rem; 
-            font-weight: 700;
-            text-align: left;
-            line-height: 1.3;
-            color: #0b2347;
-            white-space: nowrap;
-        }
-
+        .header-grid { display: grid; grid-template-columns: 1.2fr 1fr 1.2fr; align-items: center; margin-top: 15px; border-bottom: 2px solid #0b2347; padding-bottom: 12px; gap: 10px; }
+        .grid-left { font-family: 'David Libre', serif; font-size: 1.35rem; font-weight: 700; text-align: left; line-height: 1.3; color: #0b2347; white-space: nowrap; }
         .grid-center { text-align: center; }
+        .grid-right { font-size: 0.95rem; font-weight: 700; text-align: right; letter-spacing: 0.3px; line-height: 1.4; color: #0b2347; white-space: nowrap; }
+        .entrance-note { font-size: 0.75rem; font-weight: 500; color: #64748b; display: block; margin-top: 2px; }
 
-        .grid-right {
-            font-size: 0.95rem; 
-            font-weight: 700;
-            text-align: right;
-            letter-spacing: 0.3px;
-            line-height: 1.4;
-            color: #0b2347;
-            white-space: nowrap;
-        }
+        .logo-img { width: 250px; height: auto; display: block; margin: 0 auto; filter: drop-shadow(0px 2px 4px rgba(11, 35, 71, 0.15)); }
+        .logo-deal { font-family: 'Cinzel Decorative', serif; font-size: 1.25rem; font-weight: 700; letter-spacing: 6px; margin-top: 4px; color: #c5a059; }
 
-        .entrance-note {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: #64748b;
-            display: block;
-            margin-top: 2px;
-        }
-
-        .logo-img {
-            width: 250px;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-            filter: drop-shadow(0px 2px 4px rgba(11, 35, 71, 0.15));
-        }
-
-        .logo-deal {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: 6px;
-            margin-top: 4px;
-            color: #c5a059;
-        }
-
-        .section-title {
-            font-size: clamp(1.1rem, 2.5vw, 1.25rem);
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: #0b2347;
-            margin: 10px 0 4px 0;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            white-space: nowrap;
-        }
-
-        .section-title::before, .section-title::after {
-            content: '';
-            flex: 1;
-            height: 2px;
-            background: linear-gradient(to var(--dir, right), #c5a059, transparent);
-            margin: 0 15px;
-        }
+        .section-title { font-size: clamp(1.1rem, 2.5vw, 1.25rem); font-weight: 700; letter-spacing: 2px; color: #0b2347; margin: 10px 0 4px 0; text-transform: uppercase; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+        .section-title::before, .section-title::after { content: ''; flex: 1; height: 2px; background: linear-gradient(to var(--dir, right), #c5a059, transparent); margin: 0 15px; }
         .section-title::after { --dir: left; }
 
         .time-box { padding: 0 10px; margin-bottom: 2px; }
+        .time-row { display: flex; justify-content: space-between; font-size: clamp(1.05rem, 2.2vw, 1.15rem); font-weight: 600; margin: 3px 0; letter-spacing: 0.5px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 2px; white-space: nowrap; }
+        .time-row.highlight { color: #d93838; font-weight: 700; border-bottom: 1px dashed rgba(217, 56, 56, 0.3); }
+        .row-full { font-size: clamp(0.9rem, 2vw, 1rem); font-weight: 700; color: #334155; margin-top: 3px; letter-spacing: 0.5px; white-space: nowrap; }
 
-        .time-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: clamp(1.05rem, 2.2vw, 1.15rem); 
-            font-weight: 600;
-            margin: 3px 0;
-            letter-spacing: 0.5px;
-            border-bottom: 1px dashed #e2e8f0;
-            padding-bottom: 2px;
-            white-space: nowrap;
-        }
-        
-        .time-row.highlight {
-            color: #d93838;
-            font-weight: 700;
-            border-bottom: 1px dashed rgba(217, 56, 56, 0.3);
-        }
-
-        .row-full {
-            font-size: clamp(0.9rem, 2vw, 1rem);
-            font-weight: 700;
-            color: #334155;
-            margin-top: 3px;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-
-        /* Boxed Dedications Container */
-        .dedications-box {
-            background: linear-gradient(135deg, #fdfbf7 0%, #fcf9f2 100%);
-            border: 2px solid #eadeca;
-            border-top: 4px solid #c5a059;
-            border-radius: 6px;
-            padding: 10px 14px;
-            margin-top: auto; 
-            box-shadow: inset 0 0 10px rgba(197, 160, 89, 0.05);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .dedication-title {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: clamp(0.95rem, 2vw, 1.05rem);
-            font-weight: 700;
-            letter-spacing: 3px;
-            color: #c5a059;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            white-space: nowrap;
-        }
+        .dedications-box { background: linear-gradient(135deg, #fdfbf7 0%, #fcf9f2 100%); border: 2px solid #eadeca; border-top: 4px solid #c5a059; border-radius: 6px; padding: 10px 14px; margin-top: auto; box-shadow: inset 0 0 10px rgba(197, 160, 89, 0.05); display: flex; flex-direction: column; justify-content: center; }
+        .dedication-title { font-family: 'Cinzel Decorative', serif; font-size: clamp(0.95rem, 2vw, 1.05rem); font-weight: 700; letter-spacing: 3px; color: #c5a059; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; white-space: nowrap; }
         .dedication-title::before, .dedication-title::after { content: '◆'; font-size: 8px; }
 
-        .dedications-columns {
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-start;
-            gap: 12px;
-            width: 100%;
-        }
-
+        .dedications-columns { display: flex; justify-content: space-around; align-items: flex-start; gap: 12px; width: 100%; }
         .dedications-column { flex: 1; display: flex; flex-direction: column; gap: 8px; }
         .dedications-column:not(:last-child) { border-right: 1px dashed #eadeca; padding-right: 8px; }
-
         .dedication-entry { padding-bottom: 2px; }
         .dedication-type { font-size: clamp(0.75rem, 1.4vw, 0.85rem); font-weight: 700; margin-bottom: 2px; letter-spacing: 1.5px; color: #c5a059; text-transform: uppercase; white-space: normal; }
         .dedication-text { font-size: clamp(0.75rem, 1.6vw, 0.9rem); line-height: 1.35; font-weight: 600; color: #0b2347; }
@@ -240,31 +102,13 @@
         /* ==========================================================================
            TEMPLATE 2: TABLE DEDICATION FLYER
            ========================================================================== */
-        .table-layout {
-            padding: 0.6in 0.6in;
-            font-family: 'Cinzel', serif;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            box-sizing: border-box;
-            background-color: #faf8f5;
-            position: relative;
-            border: 24px solid #0b2347;
-            outline: 6px double #c5a059;
-            outline-offset: -18px;
-        }
-
+        .table-layout { padding: 0.6in 0.6in; font-family: 'Cinzel', serif; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; box-sizing: border-box; background-color: #faf8f5; position: relative; border: 24px solid #0b2347; outline: 6px double #c5a059; outline-offset: -18px; }
         .table-layout .bsd { position: absolute; top: 20px; right: 25px; font-size: 1.3rem; color: #c5a059; }
         .table-layout .logo-img { width: 380px; margin-bottom: 5px; margin-top: 15px; }
         .table-parsha { font-family: 'David Libre', serif; font-size: 4rem; font-weight: 700; margin: 5px 0 15px 0; color: #0b2347; text-shadow: 2px 2px 0px rgba(197, 160, 89, 0.3); }
         .table-purpose { font-family: 'Cinzel Decorative', serif; font-size: clamp(28px, 4vw, 45px); font-weight: 700; letter-spacing: 4px; margin-bottom: 2px; line-height: 1.2; color: #c5a059; text-transform: uppercase; }
-        
         .table-is-dedicated { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 6px; color: #64748b; }
         .diamond-separator { font-size: 1.4rem; color: #c5a059; margin: 5px 0 20px 0; letter-spacing: 12px; }
-
         .table-dedications-container { display: flex; flex-direction: column; justify-content: center; gap: 15px; width: 100%; }
         .table-dedication-block { font-size: 1.6rem; line-height: 1.6; font-weight: 500; color: #334155; width: 100%; }
         .table-dedication-block span { display: block; }
@@ -275,23 +119,36 @@
         .loading-text { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #0b2347; text-align: center; width: 100%; margin-top: 150px; padding: 0 20px; box-sizing: border-box; }
 
         /* ==========================================================================
-           PRINT AND EXACT ASPECT-RATIO MOBILE SCALING
+           PRINT AND EXACT EDGE-TO-EDGE MOBILE SCALING
            ========================================================================== */
         @media print {
             body { background-color: #ffffff; padding: 0; margin: 0; }
-            .print-page { border: none; box-shadow: none; width: 8.5in; height: 11in; margin: 0; transform: none !important; }
+            .print-page { border: none; box-shadow: none; width: 8.5in !important; height: 11in !important; margin: 0; transform: none !important; }
             .flyer-wrapper { display: block; margin: 0; padding: 0; width: 100%; height: auto; }
         }
 
-        /* The Bulletproof Scale Engine */
-        @media screen and (max-width: 850px) { 
-            body { padding: 15px 0; gap: 20px; }
+        @media screen and (max-width: 836px) { 
+            body { 
+                padding: 0; 
+                gap: 20px; 
+                background-color: #ffffff; /* Fills outer edges cleanly */
+            }
+            .flyer-wrapper {
+                width: 100vw;
+                height: calc(1056px * (100vw / 816)); 
+                display: block; 
+                position: relative;
+                overflow: hidden;
+            }
             .print-page {
-                /* Uses the purely unitless --scale variable set by JavaScript */
-                transform: scale(var(--scale));
-                transform-origin: top center;
-                /* Eliminates the empty space left behind by the transform */
-                margin-bottom: calc(1056px * (var(--scale) - 1));
+                position: absolute;
+                top: 0;
+                left: 0;
+                /* Pure CSS transform using viewport width forces exact edge-to-edge scaling */
+                transform: scale(calc(100vw / 816));
+                transform-origin: top left;
+                margin: 0;
+                box-shadow: none; /* Removes shadow edge on mobile */
             }
         }
     </style>
@@ -299,25 +156,9 @@
 <body>
 
     <div id="loading-state" class="loading-text">READING DATA FROM LIVE GOOGLE PUBLISHED EXCEL SHEET...</div>
-    <div id="wrapper" style="display: none; flex-direction: column; align-items: center; width: 100%; gap: 30px;"></div>
+    <div id="wrapper" style="display: none; flex-direction: column; align-items: center; width: 100%; gap: 20px;"></div>
 
     <script>
-        /* ==========================================================================
-           SCALE CONTROLLER FOR MOBILE
-           Ensures a pure, valid number is passed to the CSS transform function.
-           ========================================================================== */
-        function updateScale() {
-            const screenWidth = window.innerWidth;
-            // 816 is our flyer width. We subtract 30px to give it a little breathing room on the edges.
-            const scale = screenWidth < 850 ? (screenWidth - 30) / 816 : 1;
-            document.documentElement.style.setProperty('--scale', scale);
-        }
-        window.addEventListener('resize', updateScale);
-        updateScale(); // Run immediately on load
-
-        /* ==========================================================================
-           DATA FETCH ENGINE
-           ========================================================================== */
         const SIGNATURE_KEY = '2PACX-1vQkcfkH_BAJSdXzKzQguibMZ-I6K7drGRkLwFygZ8iDgeq3OmVTTnSPRpSmGQAp3MfbfDJjXc2XLNe7';
         const DIRECT_CSV_FEED = `https://docs.google.com/spreadsheets/d/e/${SIGNATURE_KEY}/pub?output=csv&sheet=WebsiteInfo`;
 
@@ -365,7 +206,7 @@
         function processSpreadsheetPayload(dateEnglish, parshaHebrew, candleLighting, rawDedicationsText) {
             const textLines = rawDedicationsText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
             
-            // Your comprehensive dictionary map for parsing variations!
+            // Updated category map per your instructions
             const categoryMap = {
                 "SHABBAT KIDDUSH": "Shabbat Kiddush",
                 "SUNDAY BREAKFAST": "Sunday Breakfast",
@@ -521,9 +362,6 @@
             const applicationWrapper = document.getElementById('wrapper');
             applicationWrapper.innerHTML = finalHTML;
             applicationWrapper.style.display = 'flex';
-            
-            // Trigger a scale update one final time just in case DOM injection affected scrollbars
-            updateScale();
         }
     </script>
 </body>
