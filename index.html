@@ -76,4 +76,318 @@
         .entrance-note { font-size: 0.75rem; font-weight: 500; color: #64748b; display: block; margin-top: 2px; }
 
         .logo-img { width: 250px; height: auto; display: block; margin: 0 auto; filter: drop-shadow(0px 2px 4px rgba(11, 35, 71, 0.15)); }
-        .logo-deal { font-family: 'Cinzel Decorative
+        .logo-deal { font-family: 'Cinzel Decorative', serif; font-size: 1.25rem; font-weight: 700; letter-spacing: 6px; margin-top: 4px; color: #c5a059; }
+
+        .section-title { font-size: clamp(1.1rem, 2.5vw, 1.25rem); font-weight: 700; letter-spacing: 2px; color: #0b2347; margin: 10px 0 4px 0; text-transform: uppercase; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+        .section-title::before, .section-title::after { content: ''; flex: 1; height: 2px; background: linear-gradient(to var(--dir, right), #c5a059, transparent); margin: 0 15px; }
+        .section-title::after { --dir: left; }
+
+        .time-box { padding: 0 10px; margin-bottom: 2px; }
+        .time-row { display: flex; justify-content: space-between; font-size: clamp(1.05rem, 2.2vw, 1.15rem); font-weight: 600; margin: 3px 0; letter-spacing: 0.5px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 2px; white-space: nowrap; }
+        .time-row.highlight { color: #d93838; font-weight: 700; border-bottom: 1px dashed rgba(217, 56, 56, 0.3); }
+        .row-full { font-size: clamp(0.9rem, 2vw, 1rem); font-weight: 700; color: #334155; margin-top: 3px; letter-spacing: 0.5px; white-space: nowrap; }
+
+        .dedications-box { background: linear-gradient(135deg, #fdfbf7 0%, #fcf9f2 100%); border: 2px solid #eadeca; border-top: 4px solid #c5a059; border-radius: 6px; padding: 10px 14px; margin-top: auto; box-shadow: inset 0 0 10px rgba(197, 160, 89, 0.05); display: flex; flex-direction: column; justify-content: center; }
+        .dedication-title { font-family: 'Cinzel Decorative', serif; font-size: clamp(0.95rem, 2vw, 1.05rem); font-weight: 700; letter-spacing: 3px; color: #c5a059; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; white-space: nowrap; }
+        .dedication-title::before, .dedication-title::after { content: '◆'; font-size: 8px; }
+
+        .dedications-columns { display: flex; justify-content: space-around; align-items: flex-start; gap: 12px; width: 100%; }
+        .dedications-column { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .dedications-column:not(:last-child) { border-right: 1px dashed #eadeca; padding-right: 8px; }
+        .dedication-entry { padding-bottom: 2px; }
+        .dedication-type { font-size: clamp(0.75rem, 1.4vw, 0.85rem); font-weight: 700; margin-bottom: 2px; letter-spacing: 1.5px; color: #c5a059; text-transform: uppercase; white-space: normal; }
+        .dedication-text { font-size: clamp(0.75rem, 1.6vw, 0.9rem); line-height: 1.35; font-weight: 600; color: #0b2347; }
+        .dedication-text strong { font-weight: 700; font-size: inherit; }
+
+        /* ==========================================================================
+           TEMPLATE 2: TABLE DEDICATION FLYER
+           ========================================================================== */
+        .table-layout { padding: 0.6in 0.6in; font-family: 'Cinzel', serif; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; box-sizing: border-box; background-color: #faf8f5; position: relative; border: 24px solid #0b2347; outline: 6px double #c5a059; outline-offset: -18px; }
+        .table-layout .bsd { position: absolute; top: 20px; right: 25px; font-size: 1.3rem; color: #c5a059; }
+        .table-layout .logo-img { width: 380px; margin-bottom: 5px; margin-top: 15px; }
+        .table-parsha { font-family: 'David Libre', serif; font-size: 4rem; font-weight: 700; margin: 5px 0 15px 0; color: #0b2347; text-shadow: 2px 2px 0px rgba(197, 160, 89, 0.3); }
+        .table-purpose { font-family: 'Cinzel Decorative', serif; font-size: clamp(28px, 4vw, 45px); font-weight: 700; letter-spacing: 4px; margin-bottom: 2px; line-height: 1.2; color: #c5a059; text-transform: uppercase; }
+        .table-is-dedicated { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 6px; color: #64748b; }
+        .diamond-separator { font-size: 1.4rem; color: #c5a059; margin: 5px 0 20px 0; letter-spacing: 12px; }
+        .table-dedications-container { display: flex; flex-direction: column; justify-content: center; gap: 15px; width: 100%; }
+        .table-dedication-block { font-size: 1.6rem; line-height: 1.6; font-weight: 500; color: #334155; width: 100%; }
+        .table-dedication-block span { display: block; }
+        .table-dedication-block .bold-core-dedication { font-size: 2.2rem; font-weight: 700; color: #0b2347; letter-spacing: 0.5px; line-height: 1.3; margin: 10px 0; text-transform: uppercase; }
+        .table-dedication-block .by-line { font-family: 'Cinzel Decorative', serif; font-weight: 700; margin-top: 15px; font-size: 1.8rem; color: #c5a059; letter-spacing: 1px; text-transform: uppercase; }
+        .table-text-divider { font-family: 'Cinzel Decorative', serif; font-weight: 700; font-size: 1.4rem; color: #c5a059; margin: 5px 0; letter-spacing: 2px; }
+
+        .loading-text { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #0b2347; text-align: center; width: 100%; margin-top: 150px; padding: 0 20px; box-sizing: border-box; }
+
+        @media print {
+            body { background-color: #ffffff; padding: 0; margin: 0; }
+            .flyer-wrapper { display: block; margin: 0; padding: 0; width: 100%; height: auto; }
+            .print-page { border: none; box-shadow: none; margin: 0; transform: none !important; position: relative !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading-state" class="loading-text">READING DATA FROM LIVE GOOGLE PUBLISHED EXCEL SHEET...</div>
+    <div id="wrapper" style="display: none; flex-direction: column; align-items: center; width: 100%; gap: 20px;"></div>
+
+    <script>
+        /* ==========================================================================
+           BULLETPROOF MOBILE SCALING ENGINE
+           Calculates the exact width of the user's screen and zooms the flyer.
+           ========================================================================== */
+        function executeMobileScaling() {
+            const wrappers = document.querySelectorAll('.flyer-wrapper');
+            // Measure actual available screen width minus 20px padding
+            const screenWidth = document.body.clientWidth;
+            const targetWidth = screenWidth - 20; 
+
+            if (targetWidth < 816) {
+                const scaleFactor = targetWidth / 816;
+                
+                wrappers.forEach(wrapper => {
+                    // Tell the wrapper to take up the EXACT scaled dimensions so things don't overlap
+                    wrapper.style.width = targetWidth + 'px';
+                    wrapper.style.height = (1056 * scaleFactor) + 'px';
+                    
+                    const page = wrapper.querySelector('.print-page');
+                    if (page) {
+                        // Absolute positioning locks it to the top left of the wrapper
+                        page.style.position = 'absolute';
+                        page.style.top = '0';
+                        page.style.left = '0';
+                        page.style.transformOrigin = 'top left';
+                        page.style.transform = `scale(${scaleFactor})`;
+                        page.style.boxShadow = 'none'; // removes jagged shadows on mobile
+                    }
+                });
+            } else {
+                // Reset for Desktop
+                wrappers.forEach(wrapper => {
+                    wrapper.style.width = '816px';
+                    wrapper.style.height = '1056px';
+                    const page = wrapper.querySelector('.print-page');
+                    if (page) {
+                        page.style.position = 'relative';
+                        page.style.transform = 'none';
+                        page.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.15)';
+                    }
+                });
+            }
+        }
+        
+        // Re-scale if the user rotates their phone
+        window.addEventListener('resize', executeMobileScaling);
+
+        /* ==========================================================================
+           DATA FETCH ENGINE
+           ========================================================================== */
+        const SIGNATURE_KEY = '2PACX-1vQkcfkH_BAJSdXzKzQguibMZ-I6K7drGRkLwFygZ8iDgeq3OmVTTnSPRpSmGQAp3MfbfDJjXc2XLNe7';
+        const DIRECT_CSV_FEED = `https://docs.google.com/spreadsheets/d/e/${SIGNATURE_KEY}/pub?output=csv&sheet=WebsiteInfo`;
+
+        fetch(DIRECT_CSV_FEED)
+            .then(response => response.text())
+            .then(csvText => {
+                const parsedRows = parseCSVRows(csvText);
+                
+                const englishDateHeader = parsedRows[0]?.[0] || 'Friday, June 19, 2026';
+                const hebrewParshaValue = parsedRows[2]?.[1] || 'קרח';
+                const candleLightingTime = parsedRows[2]?.[3] || '8:09 PM';
+                const rawDedicationsText = parsedRows[0]?.[1] || '';
+                
+                processSpreadsheetPayload(englishDateHeader, hebrewParshaValue, candleLightingTime, rawDedicationsText);
+            })
+            .catch(error => {
+                document.getElementById('loading-state').innerText = "SYNC CRITICAL ERROR: Confirm file has not been unpublished.";
+                console.error(error);
+            });
+
+        function parseCSVRows(text) {
+            let p = '', c = '', r = [];
+            let q = false;
+            let row = [''];
+            for (let i = 0; i < text.length; i++) {
+                c = text[i];
+                let next = text[i+1];
+                if (c === '"') { 
+                    if (q && next === '"') { row[row.length - 1] += '"'; i++; } 
+                    else { q = !q; }
+                } else if (c === ',' && !q) { 
+                    row.push(''); 
+                } else if ((c === '\r' || c === '\n') && !q) {
+                    if (c === '\r' && next === '\n') { i++; }
+                    r.push(row);
+                    row = [''];
+                } else { 
+                    row[row.length - 1] += c; 
+                }
+            }
+            if (row.length > 1 || row[0] !== '') r.push(row);
+            return r;
+        }
+
+        function processSpreadsheetPayload(dateEnglish, parshaHebrew, candleLighting, rawDedicationsText) {
+            const textLines = rawDedicationsText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+            
+            // Updated category map per your instructions
+            const categoryMap = {
+                "SHABBAT KIDDUSH": "Shabbat Kiddush",
+                "SUNDAY BREAKFAST": "Sunday Breakfast",
+                "SEUDAT SHELISHEET": "Seudat Shelisheet",
+                "SEUDAH SHELISHEET": "Seudat Shelisheet",
+                "GAN SHABBAT": "Gan Shabbat",
+                "WEEK OF BREAKFAST": "Week of Breakfast",
+                "MONTH OF LEARNING": "The Albert “Bero” Chehebar Learning Program Month of Learning",
+                "WEEK OF LEARNING": "The Albert “Bero” Chehebar Learning Program Week of Learning",
+                "DAY OF LEARNING": "The Albert “Bero” Chehebar Learning Program Day of Learning"
+            };
+            const allowedCategoryKeys = Object.keys(categoryMap);
+            
+            let currentCategory = '';
+            const groupedDedications = {};
+
+            for (let i = 0; i < textLines.length; i++) {
+                const normalizedLine = textLines[i].toUpperCase();
+                
+                let foundKey = allowedCategoryKeys.find(k => normalizedLine.includes(k));
+                if (foundKey) {
+                    currentCategory = categoryMap[foundKey]; 
+                    if (!groupedDedications[currentCategory]) {
+                        groupedDedications[currentCategory] = [];
+                    }
+                    continue;
+                }
+                
+                if (normalizedLine === "~AND~" || normalizedLine === "~AND~") {
+                    continue;
+                }
+
+                if (normalizedLine.startsWith("IN HONOR OF")) {
+                    let honorText = "";
+                    let byText = "";
+                    
+                    while (i + 1 < textLines.length && 
+                           !textLines[i + 1].toUpperCase().startsWith("BY:") && 
+                           !allowedCategoryKeys.some(k => textLines[i + 1].toUpperCase().includes(k)) && 
+                           textLines[i + 1].toUpperCase() !== "~AND~") {
+                        i++;
+                        honorText += (honorText ? " " : "") + textLines[i];
+                    }
+                    
+                    if (i + 1 < textLines.length && textLines[i + 1].toUpperCase().startsWith("BY:")) {
+                        i++;
+                        byText = textLines[i].replace(/^BY:\s*/i, '');
+                    }
+
+                    if (currentCategory) {
+                        if (!groupedDedications[currentCategory]) {
+                            groupedDedications[currentCategory] = [];
+                        }
+                        groupedDedications[currentCategory].push({ honor: honorText, by: byText });
+                    }
+                }
+            }
+
+            let flyer1ColumnsHTML = '';
+            for (const [type, items] of Object.entries(groupedDedications)) {
+                flyer1ColumnsHTML += `<div class="dedications-column">`;
+                items.forEach(item => {
+                    flyer1ColumnsHTML += `
+                        <div class="dedication-entry">
+                            <div class="dedication-type">${type}</div>
+                            <div class="dedication-text">
+                                IN HONOR OF<br>
+                                <strong>${item.honor}</strong><br>
+                                <span style="font-weight: 700; color: #c5a059;">BY: ${item.by}</span>
+                            </div>
+                        </div>`;
+                });
+                flyer1ColumnsHTML += `</div>`;
+            }
+
+            const formattingHebrewDate = "ה' תמוז תשפ\"ו"; 
+
+            let finalHTML = `
+            <div class="flyer-wrapper">
+                <div class="print-page">
+                    <div class="schedule-layout">
+                        <div class="bsd">בס"ד</div>
+                        <div class="schedule-content-container">
+                            <div class="header-grid">
+                                <div class="grid-left">פרשת ${parshaHebrew}<br>${formattingHebrewDate}</div>
+                                <div class="grid-center">
+                                    <img class="logo-img" src="https://i.postimg.cc/63d0xqh4/Midrash-Elyon-Newsletter-(7).png" alt="Midrash Elyon Logo">
+                                    <div class="logo-deal">DEAL</div>
+                                </div>
+                                <div class="grid-right">SHABBAT SCHEDULE<br>${dateEnglish}<br>82 NORWOOD AVE<br><span class="entrance-note">(POPLAR ENTRANCE)</span></div>
+                            </div>
+                            <div class="time-box">
+                                <div class="section-title">Shabbat Schedule</div>
+                                <div class="time-row highlight"><span>CANDLE LIGHTING</span><span>${candleLighting}</span></div>
+                                <div class="time-row"><span>KORBANOT</span><span>7:00AM</span></div>
+                                <div class="time-row"><span>HASHEM MELECH</span><span>7:15AM</span></div>
+                                <div class="row-full">FOLLOWED BY AN EXQUISITE KIDDUSH AND CLASS</div>
+                            </div>
+                            <div class="time-box">
+                                <div class="section-title">Sunday Schedule</div>
+                                <div class="time-row"><span>SHACHARIT</span><span>8:00AM</span></div>
+                                <div class="row-full">FOLLOWED BY BREAKFAST & CLASS</div>
+                            </div>
+                            <div class="time-box">
+                                <div class="section-title">Weekday Schedule</div>
+                                <div class="time-row"><span>GEMARA CLASSES</span><span>6:15AM</span></div>
+                                <div class="time-row"><span>SHACHARIT</span><span>7:15AM</span></div>
+                                <div class="row-full">FOLLOWED BY BREAKFAST & LEARNING</div>
+                            </div>
+                            <div class="time-box">
+                                <div class="section-title">Learning Program</div>
+                                <div class="time-row" style="justify-content: center; font-size: 1.05rem; font-weight: 700; margin-bottom: 2px; border: none;">MONDAY - FRIDAY MORNING</div>
+                                <div class="row-full" style="font-weight: 600; margin-bottom: 2px; color: #0b2347;">MULTIPLE LEARNING GROUPS AT 6:30AM & 8:00AM</div>
+                                <div class="row-full" style="font-size: 0.95rem; color: #4b5563;">TO JOIN A CLASS, PLEASE REACH OUT TO RABBI DAVID HABER</div>
+                            </div>
+                        </div>
+                        <div class="dedications-box" ${Object.keys(groupedDedications).length === 0 ? 'style="display:none;"' : ''}>
+                            <div class="dedication-title">Weekly Dedications</div>
+                            <div class="dedications-columns">
+                                ${flyer1ColumnsHTML}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+            for (const [type, items] of Object.entries(groupedDedications)) {
+                let tableBlocksHTML = items.map(item => `
+                    <div class="table-dedication-block">
+                        <span>IN HONOR OF</span>
+                        <div class="bold-core-dedication">${item.honor}</div>
+                        <span class="by-line">BY: ${item.by}</span>
+                    </div>
+                `).join('<div class="table-text-divider">~ AND ~</div>');
+
+                finalHTML += `
+                <div class="flyer-wrapper">
+                    <div class="print-page">
+                        <div class="table-layout">
+                            <div class="bsd">בס"ד</div>
+                            <img class="logo-img" src="https://i.postimg.cc/63d0xqh4/Midrash-Elyon-Newsletter-(7).png" alt="Midrash Elyon Logo">
+                            <div class="table-parsha">פרשת ${parshaHebrew}</div>
+                            <div class="table-purpose">${type}</div>
+                            <div class="table-is-dedicated">is dedicated</div>
+                            <div class="diamond-separator">◆ <span>◆</span> ◆</div>
+                            <div class="table-dedications-container">${tableBlocksHTML}</div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            document.getElementById('loading-state').style.display = 'none';
+            const applicationWrapper = document.getElementById('wrapper');
+            applicationWrapper.innerHTML = finalHTML;
+            applicationWrapper.style.display = 'flex';
+
+            // TRIGGER THE MOBILE SCALING ENGINE AFTER THE HTML IS INJECTED
+            executeMobileScaling();
+        }
+    </script>
+</body>
+</html>
