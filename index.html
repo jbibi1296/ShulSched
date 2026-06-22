@@ -217,6 +217,9 @@
            BULLETPROOF MOBILE SCALING ENGINE
            ========================================================================== */
         function executeMobileScaling() {
+            // Do not run scaling if the user is attempting to print
+            if (window.matchMedia && window.matchMedia('print').matches) return;
+
             const wrappers = document.querySelectorAll('.flyer-wrapper');
             const screenWidth = document.body.clientWidth;
             const targetWidth = screenWidth - 20; 
