@@ -189,11 +189,12 @@
                 
                 const englishDateHeader = parsedRows[3]?.[1] || 'June 26 - 27 2026';
                 const hebrewDateHeader = parsedRows[3]?.[0] || 'י״א בְּתַמּוּז תשפ״ו';
-                const hebrewParshaValue = parsedRows[2]?.[1] || 'קרח';
+                const hebrewParshaValue = parsedRows[4]?.[1] || 'קרח';
                 const candleLightingTime = parsedRows[2]?.[2] || '8:09 PM';
+                const havdalahTime = parsedRows[2]?.[7] || '9:08 PM';
                 const rawDedicationsText = parsedRows[0]?.[1] || '';
                 
-                processSpreadsheetPayload(englishDateHeader, hebrewParshaValue, candleLightingTime, rawDedicationsText,hebrewDateHeader);
+                processSpreadsheetPayload(englishDateHeader, hebrewParshaValue, candleLightingTime, rawDedicationsText,hebrewDateHeader,havdallahTime);
             })
             .catch(error => {
                 document.getElementById('loading-state').innerText = "SYNC CRITICAL ERROR: Confirm file has not been unpublished.";
@@ -224,7 +225,7 @@
             return r;
         }
 
-        function processSpreadsheetPayload(dateEnglish, parshaHebrew, candleLighting, rawDedicationsText,hebrewDateHeader) {
+        function processSpreadsheetPayload(dateEnglish, parshaHebrew, candleLighting, rawDedicationsText,hebrewDateHeader,havdalahTime) {
             const textLines = rawDedicationsText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
             
             // Comprehensive Dictionary Map
@@ -341,6 +342,7 @@
                                 <div class="time-row"><span>KORBANOT</span><span>7:00AM</span></div>
                                 <div class="time-row"><span>HASHEM MELECH</span><span>7:15AM</span></div>
                                 <div class="row-full">FOLLOWED BY AN EXQUISITE KIDDUSH AND CLASS</div>
+                                <div class="time-row"><span>Havdalah</span><span>${havdalahTime}</span></div>
                             </div>
                             <div class="time-box">
                                 <div class="section-title">Sunday Schedule</div>
