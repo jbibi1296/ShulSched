@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Midrash Elyon Shul Publications - Perfect Mobile Scale</title>
+    <title>Midrash Elyon Shul Publications - Print & Mobile Perfect</title>
+    
+    <!-- html2canvas library for JPG generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600;700&family=David+Libre:wght@400;500;700&display=swap');
 
@@ -24,25 +28,22 @@
             padding: 40px 0;
         }
 
+        /* The Wrapper dynamically sizes itself via JavaScript on mobile */
         .flyer-wrapper {
             position: relative;
             width: 816px;
             height: 1056px;
         }
 
-        /* Strict 8.5" x 11" Printable Page Container - CSS LOCKED */
+        /* The Flyer itself is rigidly locked to exactly 8.5x11 inches. */
         .print-page {
             background-color: #ffffff;
-            width: 816px !important;
-            min-width: 816px !important;
-            max-width: none !important;
-            height: 1056px !important; 
-            min-height: 1056px !important;
+            width: 816px; 
+            height: 1056px; 
             box-sizing: border-box;
             position: relative;
             color: #0b2347; 
             overflow: hidden;
-            page-break-after: always;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
 
@@ -148,47 +149,61 @@
         .table-dedication-block .by-line { font-family: 'Cinzel Decorative', serif; font-weight: 700; margin-top: 15px; font-size: 1.8rem; color: #c5a059; letter-spacing: 1px; text-transform: uppercase; }
         .table-text-divider { font-family: 'Cinzel Decorative', serif; font-weight: 700; font-size: 1.4rem; color: #c5a059; margin: 5px 0; letter-spacing: 2px; }
 
+        /* ==========================================================================
+           UI ELEMENTS
+           ========================================================================== */
         .loading-text { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #0b2347; text-align: center; width: 100%; margin-top: 150px; padding: 0 20px; box-sizing: border-box; }
+        
+        .download-btn {
+            background-color: #0b2347;
+            color: #ffffff;
+            border: 2px solid #c5a059;
+            padding: 15px 30px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .download-btn:hover {
+            background-color: #c5a059;
+            color: #0b2347;
+        }
+        .download-btn:disabled {
+            background-color: #4b5563;
+            border-color: #4b5563;
+            cursor: not-allowed;
+            color: #d1d5db;
+        }
 
         /* ==========================================================================
-           PRINT AND EXACT ASPECT-RATIO MOBILE SCALING
-           ========================================================================== */
-       /* ==========================================================================
            PRINT ENGINE: Forces exact layout, centering, and strips browser whitespace
            ========================================================================== */
         @media print {
             @page {
                 size: 8.5in 11in;
-                margin: 0; /* Strips browser headers, footers, and margins completely */
+                margin: 0; 
             }
             
-            html, body { 
-                background-color: #ffffff; 
-                padding: 0; 
-                margin: 0; 
-                width: 100%;
-                display: block; /* Disables screen flexbox rendering that breaks printing */
-            }
-
-            #wrapper {
-                display: block !important;
-                gap: 0 !important;
-            }
+            html, body { background-color: #ffffff; padding: 0; margin: 0; width: 100%; display: block; }
+            #wrapper { display: block !important; gap: 0 !important; }
 
             .flyer-wrapper { 
                 display: block !important; 
-                margin: 0 auto; /* Centers perfectly horizontally */
+                margin: 0 auto; 
                 padding: 0; 
                 width: 8.5in; 
                 height: 11in; 
-                page-break-after: always; /* Forces each document to its own physical sheet */
+                page-break-after: always; 
                 overflow: hidden;
             }
 
-            /* Prevents the printer from generating an empty blank sheet at the very end */
-            .flyer-wrapper:last-child {
-                page-break-after: auto; 
-            }
+            .flyer-wrapper:last-child { page-break-after: auto; }
 
             .print-page { 
                 border: none; 
@@ -201,9 +216,7 @@
                 page-break-after: avoid; 
             }
 
-            #loading-state {
-                display: none !important;
-            }
+            #loading-state, .download-btn { display: none !important; }
         }
     </style>
 </head>
@@ -217,7 +230,6 @@
            BULLETPROOF MOBILE SCALING ENGINE
            ========================================================================== */
         function executeMobileScaling() {
-            // Do not run scaling if the user is attempting to print
             if (window.matchMedia && window.matchMedia('print').matches) return;
 
             const wrappers = document.querySelectorAll('.flyer-wrapper');
@@ -256,6 +268,53 @@
         }
         
         window.addEventListener('resize', executeMobileScaling);
+
+        /* ==========================================================================
+           JPG DOWNLOAD ENGINE
+           Temporarily resets scale to capture pristine, high-res images
+           ========================================================================== */
+        async function downloadAllJPGs() {
+            const btn = document.getElementById('downloadBtn');
+            btn.innerText = "GENERATING JPGs...";
+            btn.disabled = true;
+
+            const pages = document.querySelectorAll('.print-page');
+            
+            for (let i = 0; i < pages.length; i++) {
+                const page = pages[i];
+                
+                // Save mobile states to restore later
+                const originalTransform = page.style.transform;
+                const originalPosition = page.style.position;
+                
+                // Force to native 816x1056 resolution temporarily for a crisp capture
+                page.style.transform = 'none';
+                page.style.position = 'relative';
+
+                const canvas = await html2canvas(page, {
+                    scale: 2, // 2x resolution for high quality
+                    useCORS: true, 
+                    backgroundColor: '#ffffff',
+                    width: 816,
+                    height: 1056
+                });
+
+                // Restore previous mobile scale
+                page.style.transform = originalTransform;
+                page.style.position = originalPosition;
+
+                const link = document.createElement('a');
+                link.download = `Midrash_Elyon_Flyer_${i + 1}.jpg`;
+                link.href = canvas.toDataURL('image/jpeg', 0.9);
+                link.click();
+                
+                // Brief pause so the browser doesn't block multiple rapid downloads
+                await new Promise(r => setTimeout(r, 600));
+            }
+            
+            btn.innerText = "DOWNLOAD ALL PAGES AS JPGs";
+            btn.disabled = false;
+        }
 
         /* ==========================================================================
            DATA FETCH ENGINE
@@ -381,7 +440,6 @@
             let flyer1ColumnsHTML = '';
             const categoryKeys = Object.keys(groupedDedications);
             
-            // Logic change: if there is ONLY ONE category, split multiple items into individual columns
             if (categoryKeys.length === 1) {
                 const type = categoryKeys[0];
                 groupedDedications[type].forEach(item => {
@@ -398,7 +456,6 @@
                     </div>`;
                 });
             } else {
-                // Keep default layout: group each category into its own column
                 for (const [type, items] of Object.entries(groupedDedications)) {
                     flyer1ColumnsHTML += `<div class="dedications-column">`;
                     items.forEach(item => {
@@ -493,6 +550,12 @@
                     </div>
                 </div>`;
             }
+
+            // Append the Download Button
+            finalHTML += `
+            <div style="width: 100%; display: flex; justify-content: center;">
+                <button id="downloadBtn" class="download-btn" onclick="downloadAllJPGs()">Download All Pages as JPGs</button>
+            </div>`;
 
             document.getElementById('loading-state').style.display = 'none';
             const applicationWrapper = document.getElementById('wrapper');
