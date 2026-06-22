@@ -190,7 +190,7 @@
                 const englishDateHeader = parsedRows[3]?.[1] || 'June 26 - 27 2026';
                 const hebrewDateHeader = parsedRows[3]?.[0] || 'י״א בְּתַמּוּז תשפ״ו';
                 const hebrewParshaValue = parsedRows[2]?.[1] || 'קרח';
-                const candleLightingTime = parsedRows[2]?.[3] || '8:09 PM';
+                const candleLightingTime = parsedRows[2]?.[2] || '8:09 PM';
                 const rawDedicationsText = parsedRows[0]?.[1] || '';
                 
                 processSpreadsheetPayload(englishDateHeader, hebrewParshaValue, candleLightingTime, rawDedicationsText,hebrewDateHeader);
