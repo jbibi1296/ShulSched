@@ -30,11 +30,14 @@
             height: 1056px;
         }
 
-        /* Strict 8.5" x 11" Printable Page Container */
+        /* Strict 8.5" x 11" Printable Page Container - CSS LOCKED */
         .print-page {
             background-color: #ffffff;
-            width: 816px; 
-            height: 1056px; 
+            width: 816px !important;
+            min-width: 816px !important;
+            max-width: none !important;
+            height: 1056px !important; 
+            min-height: 1056px !important;
             box-sizing: border-box;
             position: relative;
             color: #0b2347; 
@@ -59,7 +62,6 @@
             border: 14px solid #0b2347;
             outline: 3px double #c5a059;
             outline-offset: -10px;
-            /* HARD LOCK: Absolutely prevents any internal content from drawing over the borders */
             overflow: hidden; 
         }
 
@@ -95,8 +97,6 @@
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
-            
-            /* Strict safety limit: prevents the box from growing out of control */
             max-height: 340px; 
             overflow: hidden;
         }
@@ -115,22 +115,17 @@
 
         /* ==========================================================================
            DYNAMIC WHITESPACE FILLER RULES
-           These classes are auto-injected by JS based on the dedication count
            ========================================================================== */
-        
-        /* Layout for exactly 1 dedication */
         .dedications-box.count-1 { padding: 40px 25px; gap: 10px; }
         .dedications-box.count-1 .dedication-title { font-size: 1.4rem; letter-spacing: 4px; margin-bottom: 15px; }
         .dedications-box.count-1 .dedication-type { font-size: 1.15rem; letter-spacing: 2px; margin-bottom: 8px; }
         .dedications-box.count-1 .dedication-text { font-size: 1.45rem; line-height: 1.5; }
         
-        /* Layout for exactly 2 dedications */
         .dedications-box.count-2 { padding: 25px 20px; gap: 5px; }
         .dedications-box.count-2 .dedication-title { font-size: 1.2rem; letter-spacing: 3px; margin-bottom: 12px; }
         .dedications-box.count-2 .dedication-type { font-size: 0.95rem; letter-spacing: 1.5px; margin-bottom: 5px; }
         .dedications-box.count-2 .dedication-text { font-size: 1.15rem; line-height: 1.4; }
 
-        /* Default Layout for 3 or more dedications (Standard Compact) */
         .dedications-box.count-3-plus { padding: 10px 14px; }
         .dedications-box.count-3-plus .dedication-title { font-size: clamp(0.95rem, 2vw, 1.05rem); letter-spacing: 3px; margin-bottom: 8px; }
         .dedications-box.count-3-plus .dedication-type { font-size: clamp(0.75rem, 1.4vw, 0.85rem); letter-spacing: 1.5px; margin-bottom: 2px; }
@@ -162,6 +157,30 @@
             body { background-color: #ffffff; padding: 0; margin: 0; }
             .flyer-wrapper { display: block; margin: 0; padding: 0; width: 100%; height: auto; }
             .print-page { border: none; box-shadow: none; margin: 0; transform: none !important; position: relative !important; }
+        }
+
+        @media screen and (max-width: 836px) { 
+            body { 
+                padding: 0; 
+                gap: 20px; 
+                background-color: #ffffff; 
+            }
+            .flyer-wrapper {
+                width: 100vw;
+                height: calc(1056px * (100vw / 816)); 
+                display: block; 
+                position: relative;
+                overflow: hidden;
+            }
+            .print-page {
+                position: absolute;
+                top: 0;
+                left: 0;
+                transform: scale(calc(100vw / 816));
+                transform-origin: top left;
+                margin: 0;
+                box-shadow: none; 
+            }
         }
     </style>
 </head>
@@ -334,10 +353,14 @@
             else if (totalDedicationsCount === 2) scaleClass = 'count-2';
 
             let flyer1ColumnsHTML = '';
-            for (const [type, items] of Object.entries(groupedDedications)) {
-                flyer1ColumnsHTML += `<div class="dedications-column">`;
-                items.forEach(item => {
+            const categoryKeys = Object.keys(groupedDedications);
+            
+            // Logic change: if there is ONLY ONE category, split multiple items into individual columns
+            if (categoryKeys.length === 1) {
+                const type = categoryKeys[0];
+                groupedDedications[type].forEach(item => {
                     flyer1ColumnsHTML += `
+                    <div class="dedications-column">
                         <div class="dedication-entry">
                             <div class="dedication-type">${type}</div>
                             <div class="dedication-text">
@@ -345,9 +368,26 @@
                                 <strong>${item.honor}</strong>
                                 ${item.by ? `<br><span style="font-weight: 700; color: #c5a059;">BY: ${item.by}</span>` : ''}
                             </div>
-                        </div>`;
+                        </div>
+                    </div>`;
                 });
-                flyer1ColumnsHTML += `</div>`;
+            } else {
+                // Keep default layout: group each category into its own column
+                for (const [type, items] of Object.entries(groupedDedications)) {
+                    flyer1ColumnsHTML += `<div class="dedications-column">`;
+                    items.forEach(item => {
+                        flyer1ColumnsHTML += `
+                            <div class="dedication-entry">
+                                <div class="dedication-type">${type}</div>
+                                <div class="dedication-text">
+                                    ${item.prefix ? `${item.prefix.toUpperCase()}<br>` : ''}
+                                    <strong>${item.honor}</strong>
+                                    ${item.by ? `<br><span style="font-weight: 700; color: #c5a059;">BY: ${item.by}</span>` : ''}
+                                </div>
+                            </div>`;
+                    });
+                    flyer1ColumnsHTML += `</div>`;
+                }
             }
 
             const formattingHebrewDate = hebrewDateHeader; 
@@ -371,7 +411,7 @@
                                 <div class="time-row highlight"><span>CANDLE LIGHTING</span><span>${candleLighting}</span></div>
                                 <div class="time-row"><span>KORBANOT</span><span>7:00AM</span></div>
                                 <div class="time-row"><span>HASHEM MELECH</span><span>7:15AM</span></div>
-                                <div class="row-full" style="color: red;">FOLLOWED BY AN EXQUISITE KIDDUSH AND CLASS WITH RABBI DAVID HABER</div>
+                                <div class="row-full" style="color: #d93838;">FOLLOWED BY AN EXQUISITE KIDDUSH AND CLASS WITH RABBI DAVID HABER</div>
                                 <div class="time-row"><span>NEW SHABBAT LEARNING PROGRAM</span><span>10:00AM</span></div>
                                 <div class="time-row highlight"><span>HAVDALAH</span><span>${havdalahTime}</span></div>
                             </div>
