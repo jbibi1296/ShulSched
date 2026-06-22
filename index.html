@@ -153,33 +153,56 @@
         /* ==========================================================================
            PRINT AND EXACT ASPECT-RATIO MOBILE SCALING
            ========================================================================== */
+       /* ==========================================================================
+           PRINT ENGINE: Forces exact layout, centering, and strips browser whitespace
+           ========================================================================== */
         @media print {
-            body { background-color: #ffffff; padding: 0; margin: 0; }
-            .flyer-wrapper { display: block; margin: 0; padding: 0; width: 100%; height: auto; }
-            .print-page { border: none; box-shadow: none; margin: 0; transform: none !important; position: relative !important; }
-        }
-
-        @media screen and (max-width: 836px) { 
-            body { 
-                padding: 0; 
-                gap: 20px; 
-                background-color: #ffffff; 
+            @page {
+                size: 8.5in 11in;
+                margin: 0; /* Strips browser headers, footers, and margins completely */
             }
-            .flyer-wrapper {
-                width: 100vw;
-                height: calc(1056px * (100vw / 816)); 
-                display: block; 
-                position: relative;
+            
+            html, body { 
+                background-color: #ffffff; 
+                padding: 0; 
+                margin: 0; 
+                width: 100%;
+                display: block; /* Disables screen flexbox rendering that breaks printing */
+            }
+
+            #wrapper {
+                display: block !important;
+                gap: 0 !important;
+            }
+
+            .flyer-wrapper { 
+                display: block !important; 
+                margin: 0 auto; /* Centers perfectly horizontally */
+                padding: 0; 
+                width: 8.5in; 
+                height: 11in; 
+                page-break-after: always; /* Forces each document to its own physical sheet */
                 overflow: hidden;
             }
-            .print-page {
-                position: absolute;
-                top: 0;
-                left: 0;
-                transform: scale(calc(100vw / 816));
-                transform-origin: top left;
-                margin: 0;
+
+            /* Prevents the printer from generating an empty blank sheet at the very end */
+            .flyer-wrapper:last-child {
+                page-break-after: auto; 
+            }
+
+            .print-page { 
+                border: none; 
                 box-shadow: none; 
+                margin: 0; 
+                transform: none !important; 
+                position: relative !important; 
+                width: 8.5in !important;
+                height: 11in !important;
+                page-break-after: avoid; 
+            }
+
+            #loading-state {
+                display: none !important;
             }
         }
     </style>
