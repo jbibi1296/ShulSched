@@ -194,7 +194,7 @@
                 const havdalahTime = parsedRows[2]?.[7] || '9:08 PM';
                 const rawDedicationsText = parsedRows[0]?.[1] || '';
                 
-                processSpreadsheetPayload(englishDateHeader, hebrewParshaValue, candleLightingTime, rawDedicationsText,hebrewDateHeader,havdallahTime);
+                processSpreadsheetPayload(englishDateHeader, hebrewParshaValue, candleLightingTime, rawDedicationsText,hebrewDateHeader,havdalahTime);
             })
             .catch(error => {
                 document.getElementById('loading-state').innerText = "SYNC CRITICAL ERROR: Confirm file has not been unpublished.";
@@ -342,7 +342,7 @@
                                 <div class="time-row"><span>KORBANOT</span><span>7:00AM</span></div>
                                 <div class="time-row"><span>HASHEM MELECH</span><span>7:15AM</span></div>
                                 <div class="row-full">FOLLOWED BY AN EXQUISITE KIDDUSH AND CLASS</div>
-                                <div class="time-row"><span>Havdalah</span><span>${havdalahTime}</span></div>
+                                <div class="time-row highlight"><span>Havdalah</span><span>${havdalahTime}</span></div>
                             </div>
                             <div class="time-box">
                                 <div class="section-title">Sunday Schedule</div>
