@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Midrash Elyon Shul Publications - Print & Mobile Perfect</title>
     
-    <!-- html2canvas library for JPG generation -->
+    <!-- Libraries for JPG and PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600;700&family=David+Libre:wght@400;500;700&display=swap');
@@ -154,27 +155,39 @@
            ========================================================================== */
         .loading-text { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #0b2347; text-align: center; width: 100%; margin-top: 150px; padding: 0 20px; box-sizing: border-box; }
         
-        .download-btn {
-            background-color: #0b2347;
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+            width: 100%;
+        }
+
+        .action-btn {
             color: #ffffff;
             border: 2px solid #c5a059;
             padding: 15px 30px;
             font-family: 'Cinzel', serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
             border-radius: 6px;
             transition: all 0.3s ease;
-            margin-bottom: 40px;
             text-transform: uppercase;
             letter-spacing: 1px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .download-btn:hover {
+
+        .jpg-btn { background-color: #0b2347; }
+        .pdf-btn { background-color: #8c2a2a; }
+
+        .action-btn:hover {
             background-color: #c5a059;
             color: #0b2347;
+            border-color: #0b2347;
         }
-        .download-btn:disabled {
+        .action-btn:disabled {
             background-color: #4b5563;
             border-color: #4b5563;
             cursor: not-allowed;
@@ -182,7 +195,7 @@
         }
 
         /* ==========================================================================
-           PRINT ENGINE: Forces exact layout, centering, and strips browser whitespace
+           PRINT ENGINE
            ========================================================================== */
         @media print {
             @page {
@@ -216,7 +229,7 @@
                 page-break-after: avoid; 
             }
 
-            #loading-state, .download-btn { display: none !important; }
+            #loading-state, .button-container { display: none !important; }
         }
     </style>
 </head>
@@ -271,49 +284,116 @@
 
         /* ==========================================================================
            JPG DOWNLOAD ENGINE
-           Temporarily resets scale to capture pristine, high-res images
            ========================================================================== */
         async function downloadAllJPGs() {
-            const btn = document.getElementById('downloadBtn');
+            const btn = document.getElementById('downloadJpgBtn');
+            const pdfBtn = document.getElementById('downloadPdfBtn');
             btn.innerText = "GENERATING JPGs...";
             btn.disabled = true;
+            pdfBtn.disabled = true;
 
             const pages = document.querySelectorAll('.print-page');
             
             for (let i = 0; i < pages.length; i++) {
                 const page = pages[i];
                 
-                // Save mobile states to restore later
                 const originalTransform = page.style.transform;
                 const originalPosition = page.style.position;
                 
-                // Force to native 816x1056 resolution temporarily for a crisp capture
                 page.style.transform = 'none';
                 page.style.position = 'relative';
 
                 const canvas = await html2canvas(page, {
-                    scale: 2, // 2x resolution for high quality
+                    scale: 2, 
                     useCORS: true, 
                     backgroundColor: '#ffffff',
                     width: 816,
                     height: 1056
                 });
 
-                // Restore previous mobile scale
                 page.style.transform = originalTransform;
                 page.style.position = originalPosition;
 
                 const link = document.createElement('a');
                 link.download = `Midrash_Elyon_Flyer_${i + 1}.jpg`;
-                link.href = canvas.toDataURL('image/jpeg', 0.9);
+                link.href = canvas.toDataURL('image/jpeg', 0.95);
                 link.click();
                 
-                // Brief pause so the browser doesn't block multiple rapid downloads
                 await new Promise(r => setTimeout(r, 600));
             }
             
             btn.innerText = "DOWNLOAD ALL PAGES AS JPGs";
             btn.disabled = false;
+            pdfBtn.disabled = false;
+        }
+
+        /* ==========================================================================
+           PDF DOWNLOAD ENGINE (WITH CUSTOM COPY QUANTITIES)
+           ========================================================================== */
+        async function downloadCustomPDF() {
+            const btn = document.getElementById('downloadPdfBtn');
+            const jpgBtn = document.getElementById('downloadJpgBtn');
+            btn.innerText = "GENERATING PDF...";
+            btn.disabled = true;
+            jpgBtn.disabled = true;
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'in', [8.5, 11]);
+            const pages = document.querySelectorAll('.print-page');
+            
+            let isFirstPageAdded = false;
+
+            for (let i = 0; i < pages.length; i++) {
+                const page = pages[i];
+                
+                // Determine how many copies to print based on the layout type
+                let copies = 1;
+                if (i === 0) {
+                    copies = 2; // Master Schedule flyer gets 2 copies
+                } else {
+                    const purposeEl = page.querySelector('.table-purpose');
+                    if (purposeEl && purposeEl.innerText.toUpperCase().includes('SHABBAT KIDDUSH')) {
+                        copies = 12; // Shabbat Kiddush table flyers get 12 copies
+                    } else {
+                        copies = 6; // All other table flyers get 6 copies
+                    }
+                }
+
+                // Render page to canvas
+                const originalTransform = page.style.transform;
+                const originalPosition = page.style.position;
+                
+                page.style.transform = 'none';
+                page.style.position = 'relative';
+
+                const canvas = await html2canvas(page, {
+                    scale: 2, 
+                    useCORS: true, 
+                    backgroundColor: '#ffffff',
+                    width: 816,
+                    height: 1056
+                });
+
+                page.style.transform = originalTransform;
+                page.style.position = originalPosition;
+
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+
+                // Inject the generated image into the PDF for the requested number of copies
+                for (let c = 0; c < copies; c++) {
+                    if (isFirstPageAdded) {
+                        pdf.addPage();
+                    }
+                    pdf.addImage(imgData, 'JPEG', 0, 0, 8.5, 11);
+                    isFirstPageAdded = true;
+                }
+            }
+            
+            pdf.save('Midrash_Elyon_Publications.pdf');
+            
+            btn.innerText = "DOWNLOAD CUSTOM BATCH PDF";
+            btn.disabled = false;
+            jpgBtn.disabled = false;
         }
 
         /* ==========================================================================
@@ -473,8 +553,6 @@
                 }
             }
 
-            const formattingHebrewDate = hebrewDateHeader; 
-
             let finalHTML = `
             <div class="flyer-wrapper">
                 <div class="print-page">
@@ -482,7 +560,7 @@
                         <div class="bsd">בס"ד</div>
                         <div class="schedule-content-container">
                             <div class="header-grid">
-                                <div class="grid-left">פרשת ${parshaHebrew}<br>${formattingHebrewDate}</div>
+                                <div class="grid-left">פרשת ${parshaHebrew}<br>${hebrewDateHeader}</div>
                                 <div class="grid-center">
                                     <img class="logo-img" src="https://i.postimg.cc/63d0xqh4/Midrash-Elyon-Newsletter-(7).png" alt="Midrash Elyon Logo">
                                     <div class="logo-deal">DEAL</div>
@@ -551,10 +629,11 @@
                 </div>`;
             }
 
-            // Append the Download Button
+            // Append the Download Buttons
             finalHTML += `
-            <div style="width: 100%; display: flex; justify-content: center;">
-                <button id="downloadBtn" class="download-btn" onclick="downloadAllJPGs()">Download All Pages as JPGs</button>
+            <div class="button-container">
+                <button id="downloadJpgBtn" class="action-btn jpg-btn" onclick="downloadAllJPGs()">Download All Pages as JPGs</button>
+                <button id="downloadPdfBtn" class="action-btn pdf-btn" onclick="downloadCustomPDF()">Download Custom Batch PDF</button>
             </div>`;
 
             document.getElementById('loading-state').style.display = 'none';
