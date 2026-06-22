@@ -20,8 +20,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 30px;
-            padding: 20px 0;
+            gap: 40px;
+            padding: 40px 0;
         }
 
         /* The Wrapper dynamically sizes itself via JavaScript on mobile 
@@ -118,6 +118,9 @@
 
         .loading-text { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #0b2347; text-align: center; width: 100%; margin-top: 150px; padding: 0 20px; box-sizing: border-box; }
 
+        /* ==========================================================================
+           PRINT AND EXACT ASPECT-RATIO MOBILE SCALING
+           ========================================================================== */
         @media print {
             body { background-color: #ffffff; padding: 0; margin: 0; }
             .flyer-wrapper { display: block; margin: 0; padding: 0; width: 100%; height: auto; }
@@ -137,7 +140,6 @@
            ========================================================================== */
         function executeMobileScaling() {
             const wrappers = document.querySelectorAll('.flyer-wrapper');
-            // Measure actual available screen width minus 20px padding
             const screenWidth = document.body.clientWidth;
             const targetWidth = screenWidth - 20; 
 
@@ -145,23 +147,20 @@
                 const scaleFactor = targetWidth / 816;
                 
                 wrappers.forEach(wrapper => {
-                    // Tell the wrapper to take up the EXACT scaled dimensions so things don't overlap
                     wrapper.style.width = targetWidth + 'px';
                     wrapper.style.height = (1056 * scaleFactor) + 'px';
                     
                     const page = wrapper.querySelector('.print-page');
                     if (page) {
-                        // Absolute positioning locks it to the top left of the wrapper
                         page.style.position = 'absolute';
                         page.style.top = '0';
                         page.style.left = '0';
                         page.style.transformOrigin = 'top left';
                         page.style.transform = `scale(${scaleFactor})`;
-                        page.style.boxShadow = 'none'; // removes jagged shadows on mobile
+                        page.style.boxShadow = 'none';
                     }
                 });
             } else {
-                // Reset for Desktop
                 wrappers.forEach(wrapper => {
                     wrapper.style.width = '816px';
                     wrapper.style.height = '1056px';
@@ -175,7 +174,6 @@
             }
         }
         
-        // Re-scale if the user rotates their phone
         window.addEventListener('resize', executeMobileScaling);
 
         /* ==========================================================================
@@ -189,12 +187,13 @@
             .then(csvText => {
                 const parsedRows = parseCSVRows(csvText);
                 
-                const englishDateHeader = parsedRows[0]?.[0] || 'Friday, June 19, 2026';
+                const englishDateHeader = parsedRows[3]?.[1] || 'June 26 - 27 2026';
+                const hebrewDateHeader = parsedRows[3]?.[0] || 'י״א בְּתַמּוּז תשפ״ו';
                 const hebrewParshaValue = parsedRows[2]?.[1] || 'קרח';
                 const candleLightingTime = parsedRows[2]?.[3] || '8:09 PM';
                 const rawDedicationsText = parsedRows[0]?.[1] || '';
                 
-                processSpreadsheetPayload(englishDateHeader, hebrewParshaValue, candleLightingTime, rawDedicationsText);
+                processSpreadsheetPayload(englishDateHeader, hebrewParshaValue, candleLightingTime, rawDedicationsText,hebrewDateHeader);
             })
             .catch(error => {
                 document.getElementById('loading-state').innerText = "SYNC CRITICAL ERROR: Confirm file has not been unpublished.";
@@ -225,10 +224,10 @@
             return r;
         }
 
-        function processSpreadsheetPayload(dateEnglish, parshaHebrew, candleLighting, rawDedicationsText) {
+        function processSpreadsheetPayload(dateEnglish, parshaHebrew, candleLighting, rawDedicationsText,hebrewDateHeader) {
             const textLines = rawDedicationsText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
             
-            // Updated category map per your instructions
+            // Comprehensive Dictionary Map
             const categoryMap = {
                 "SHABBAT KIDDUSH": "Shabbat Kiddush",
                 "SUNDAY BREAKFAST": "Sunday Breakfast",
@@ -241,6 +240,20 @@
                 "DAY OF LEARNING": "The Albert “Bero” Chehebar Learning Program Day of Learning"
             };
             const allowedCategoryKeys = Object.keys(categoryMap);
+            
+            // Expanded Prefixes array to handle robust custom wordings
+            const knownPrefixes = [
+                "IN HONOR OF", 
+                "IN MEMORY OF", 
+                "LEILUI NISHMAT", 
+                "L'ILUI NISHMAT", 
+                "REFUAH SHELEMAH", 
+                "REFUAH SHLEMAH",
+                "DEDICATED TO", 
+                "IN CELEBRATION OF", 
+                "FOR THE HATZLACHA OF",
+                "IN MERIT OF"
+            ];
             
             let currentCategory = '';
             const groupedDedications = {};
@@ -257,20 +270,27 @@
                     continue;
                 }
                 
-                if (normalizedLine === "~AND~" || normalizedLine === "~AND~") {
+                if (normalizedLine === "~AND~" || normalizedLine === "~ AND ~") {
                     continue;
                 }
 
-                if (normalizedLine.startsWith("IN HONOR OF")) {
-                    let honorText = "";
+                // If line does not start with BY: and we are within a valid category, start building a dedication block
+                if (!normalizedLine.startsWith("BY:") && currentCategory) {
+                    
+                    let isKnownPrefix = knownPrefixes.some(p => normalizedLine.startsWith(p));
+                    
+                    let prefixText = isKnownPrefix ? textLines[i] : "";
+                    let honorText = isKnownPrefix ? "" : textLines[i];
                     let byText = "";
                     
                     while (i + 1 < textLines.length && 
                            !textLines[i + 1].toUpperCase().startsWith("BY:") && 
                            !allowedCategoryKeys.some(k => textLines[i + 1].toUpperCase().includes(k)) && 
-                           textLines[i + 1].toUpperCase() !== "~AND~") {
+                           textLines[i + 1].toUpperCase() !== "~AND~" &&
+                           textLines[i + 1].toUpperCase() !== "~ AND ~") {
                         i++;
-                        honorText += (honorText ? " " : "") + textLines[i];
+                        // Use HTML breaks to respect the line separations made by the user in the sheet
+                        honorText += (honorText ? "<br>" : "") + textLines[i];
                     }
                     
                     if (i + 1 < textLines.length && textLines[i + 1].toUpperCase().startsWith("BY:")) {
@@ -278,12 +298,7 @@
                         byText = textLines[i].replace(/^BY:\s*/i, '');
                     }
 
-                    if (currentCategory) {
-                        if (!groupedDedications[currentCategory]) {
-                            groupedDedications[currentCategory] = [];
-                        }
-                        groupedDedications[currentCategory].push({ honor: honorText, by: byText });
-                    }
+                    groupedDedications[currentCategory].push({ prefix: prefixText, honor: honorText, by: byText });
                 }
             }
 
@@ -295,16 +310,16 @@
                         <div class="dedication-entry">
                             <div class="dedication-type">${type}</div>
                             <div class="dedication-text">
-                                IN HONOR OF<br>
-                                <strong>${item.honor}</strong><br>
-                                <span style="font-weight: 700; color: #c5a059;">BY: ${item.by}</span>
+                                ${item.prefix ? `${item.prefix.toUpperCase()}<br>` : ''}
+                                <strong>${item.honor}</strong>
+                                ${item.by ? `<br><span style="font-weight: 700; color: #c5a059;">BY: ${item.by}</span>` : ''}
                             </div>
                         </div>`;
                 });
                 flyer1ColumnsHTML += `</div>`;
             }
 
-            const formattingHebrewDate = "ה' תמוז תשפ\"ו"; 
+            const formattingHebrewDate = hebrewDateHeader; 
 
             let finalHTML = `
             <div class="flyer-wrapper">
@@ -358,9 +373,9 @@
             for (const [type, items] of Object.entries(groupedDedications)) {
                 let tableBlocksHTML = items.map(item => `
                     <div class="table-dedication-block">
-                        <span>IN HONOR OF</span>
+                        ${item.prefix ? `<span>${item.prefix.toUpperCase()}</span>` : ''}
                         <div class="bold-core-dedication">${item.honor}</div>
-                        <span class="by-line">BY: ${item.by}</span>
+                        ${item.by ? `<span class="by-line">BY: ${item.by.toUpperCase()}</span>` : ''}
                     </div>
                 `).join('<div class="table-text-divider">~ AND ~</div>');
 
@@ -385,7 +400,6 @@
             applicationWrapper.innerHTML = finalHTML;
             applicationWrapper.style.display = 'flex';
 
-            // TRIGGER THE MOBILE SCALING ENGINE AFTER THE HTML IS INJECTED
             executeMobileScaling();
         }
     </script>
