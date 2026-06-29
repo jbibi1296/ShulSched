@@ -417,7 +417,7 @@
                 const weekdayPreShacharitLearning = parsedRows[2]?.[9] || '6:15 AM';
                 const sundayShacharit = parsedRows[2]?.[10] || '8:00 AM';
                 
-                processSpreadsheetPayload(englishDateHeader, hebrewParshaValue, candleLightingTime, rawDedicationsText, hebrewDateHeader, havdalahTime,weekdayShacharit,weekdayPreShacharitLearning);
+                processSpreadsheetPayload(englishDateHeader, hebrewParshaValue, candleLightingTime, rawDedicationsText, hebrewDateHeader, havdalahTime,weekdayShacharit,weekdayPreShacharitLearning,sundayShacharit);
             })
             .catch(error => {
                 document.getElementById('loading-state').innerText = "SYNC CRITICAL ERROR: Confirm file has not been unpublished.";
