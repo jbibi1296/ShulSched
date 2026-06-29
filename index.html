@@ -413,8 +413,11 @@
                 const candleLightingTime = parsedRows[2]?.[2] || '8:09 PM';
                 const havdalahTime = parsedRows[2]?.[7] || '9:08 PM';
                 const rawDedicationsText = parsedRows[0]?.[1] || '';
+                const weekdayShacharit = parsedRows[2]?.[8] || '7:15 AM';
+                const weekdayPreShacharitLearning = parsedRows[2]?.[9] || '6:15 AM';
+                const sundayShacharit = parsedRows[2]?.[10] || '8:00 AM';
                 
-                processSpreadsheetPayload(englishDateHeader, hebrewParshaValue, candleLightingTime, rawDedicationsText, hebrewDateHeader, havdalahTime);
+                processSpreadsheetPayload(englishDateHeader, hebrewParshaValue, candleLightingTime, rawDedicationsText, hebrewDateHeader, havdalahTime,weekdayShacharit,weekdayPreShacharitLearning);
             })
             .catch(error => {
                 document.getElementById('loading-state').innerText = "SYNC CRITICAL ERROR: Confirm file has not been unpublished.";
@@ -445,7 +448,7 @@
             return r;
         }
 
-        function processSpreadsheetPayload(dateEnglish, parshaHebrew, candleLighting, rawDedicationsText, hebrewDateHeader, havdalahTime) {
+        function processSpreadsheetPayload(dateEnglish, parshaHebrew, candleLighting, rawDedicationsText, hebrewDateHeader, havdalahTime,weekdayShacharit,weekdayPreShacharitLearning,sundayShacharit) {
             const textLines = rawDedicationsText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
             
             const categoryMap = {
@@ -578,13 +581,13 @@
                             </div>
                             <div class="time-box">
                                 <div class="section-title">Sunday Schedule</div>
-                                <div class="time-row" ><span>SHACHARIT</span><span>8:00AM</span></div>
+                                <div class="time-row" ><span>SHACHARIT</span><span>${sundayShacharit}</span></div>
                                 <div class="row-full" style="color: #c5a059;">FOLLOWED BY DELUXE BREAKFAST & CLASS WITH RABBI DAVID HABER</div>
                             </div>
                             <div class="time-box">
                                 <div class="section-title">Weekday Schedule</div>
-                                <div class="time-row"><span>GEMARA CLASSES</span><span>6:25AM</span></div>
-                                <div class="time-row"><span>SHACHARIT</span><span>7:00AM</span></div>
+                                <div class="time-row"><span>GEMARA CLASSES</span><span>${weekdayPreShacharitLearning}</span></div>
+                                <div class="time-row"><span>SHACHARIT</span><span>${weekdayShacharit}</span></div>
                                 <div class="row-full" style="color: #c5a059;">FOLLOWED BY BREAKFAST & LEARNING</div>
                             </div>
                             <div class="time-box">
