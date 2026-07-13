@@ -622,7 +622,7 @@
                         <div class="table-layout">
                             <div class="bsd">בס"ד</div>
                             <img class="logo-img" src="https://i.postimg.cc/63d0xqh4/Midrash-Elyon-Newsletter-(7).png" alt="Midrash Elyon Logo">
-                            <div class="table-parsha">פרשת ${parshaHebrew}</div>
+                            ${(type === 'Shabbat Kiddush' || type === 'Seudat Shelisheet') ? `<div class="table-parsha">פרשת ${parshaHebrew}</div>` : ''}
                             <div class="table-purpose">${type}</div>
                             <div class="table-is-dedicated">is dedicated</div>
                             <div class="diamond-separator">◆ <span>◆</span> ◆</div>
